@@ -1,0 +1,29 @@
+        <select title="{$title}" class="full-width" id="{$config.prefix}{$name}" name="{$name}" data-init-plugin="select2"  {if condition="isset($config['multi']) && $config['multi'] == true"}multiple{/if} {if condition="isset($config['disabled']) && $config['disabled'] == true"}disabled{/if} >
+            {if condition="isset($config['group'])" }
+                {volist name="config.group" id="item" }
+                   <optgroup label="{$item.title}">
+                       {volist name="item.list" id="vo"}
+                            {if condition="is_array($vo)"}
+                               <option value="{$vo.value}" {if condition="isset($vo['disabled']) && $vo['disabled'] == true"}disabled{/if} {if condition=" ( isset($vo['selected']) && $vo['selected'] == true ) || ( isset($config['value']) && $config['value'] == $vo['value'] )" }selected{/if} >{$key}</option>
+                               {else/}
+                               <option value="{$key}" {if condition="isset($config['value']) && $config['value'] == $key" }selected{/if}  >{$vo}</option>
+                            {/if}
+                       {/volist}
+                   </optgroup>
+                {/volist}
+            {/if}
+            {if condition="isset($config['list'])" }
+                <option value="">请选择</option>
+                {volist name="config.list" id="vo"}
+                    {if condition="is_array($vo)"}
+                        <option value="{$vo.value}" {if condition="isset($vo['disabled']) && $vo['disabled'] == true" }disabled{/if} {if condition=" ( isset($vo['selected']) && $vo['selected'] == true ) || ( isset($config['value']) && $config['value'] == $vo['value'] )" }selected{/if} >{$key}</option>
+                        {else/}
+                        <option value="{$key}" {if condition=" isset($config['value']) && $config['value'] == $key" }selected{/if}  >{$vo}</option>
+                    {/if}
+                {/volist}
+            {/if}
+        </select>
+        <script>
+            if( typeof $().select2 == 'function' )
+                $('select').select2()
+        </script>

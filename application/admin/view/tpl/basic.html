@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+{include file="admin@public/config" /}
+{block name="css"}{/block}
+<body style="overflow:visible;min-height:auto;">
+<div class="page-content" style="margin-left:0;padding-top:0">
+    <div class="container-fluid container-fh">
+        {block name="content"}{/block}
+    </div>
+</div>
+</body>
+</html>
+{include file="admin@public/script" /}
+<script>
+    $(document).keydown(function(e){
+        var code = e.keyCode;
+        if( code == 116  ){
+            e.preventDefault();
+            window.location.reload();
+        }
+    })
+</script>
+{block name="script"}{/block}

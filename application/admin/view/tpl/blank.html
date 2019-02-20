@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+{include file="admin@public/config" /}
+{block name="css"}{/block}
+<body style="overflow:visible;min-height:auto;">
+{block name="content"}{/block}
+</body>
+</html>
+{include file="admin@public/script" /}
+<script>
+    $(document).keydown(function(e){
+        var code = e.keyCode;
+        if( code == 116  ){
+            e.preventDefault();
+            window.location.reload();
+        }
+    })
+</script>
+{block name="script"}{/block}

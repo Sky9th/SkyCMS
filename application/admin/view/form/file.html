@@ -1,0 +1,21 @@
+<div class="image-upload" id="{$config.prefix}{$name}">
+    <div class="image-item">
+        <div class="file-preview">
+            {$config.value|get_file=true|default="<i class='fa fa-file'></i><p>暂无文件</p>"}
+        </div>
+        <div class="image-item-edit">
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary" title="{:url('admin/upload/manager')}" onclick="open_file_modal(this, this.title)">
+                    <i class="fa fa-edit"></i>
+                    <input type="hidden" name="{$name}" value="{$config.value}" >
+                </button>
+                <button class="btn btn-success" title="/admin/upload/file.html#{$config.prefix}{$name}" onclick="open_frame(this.title,'80%','75%');return false;">
+                    <i class="fa fa-upload"></i>
+                </button>
+                <button type="button" class="btn btn-info" onclick="$(this).parent().parent().prev().html('<i class=\'fa fa-4x fa-file\'></i><p>暂无文件</p>');$('input[name={$name}]').val('');">
+                    <i class="fa fa-close"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

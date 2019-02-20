@@ -1,0 +1,30 @@
+{extend name="tpl:basic" /}
+{block name="content"}
+    <body class="login-body">
+    <div class="container">
+
+        <form class="form-signin" action="{:url('admin/login/reset')}" id="reset">
+            <h2 class="form-signin-heading">修改密码</h2>
+            <div class="login-wrap">
+                <input type="text" class="form-control" placeholder="请输入验证码" name="code" autofocus>
+                <input type="password" class="form-control" placeholder="重置密码" name="password">
+                <input type="password" class="form-control" placeholder="确认密码" name="password2">
+                <!-- <input type="text" class="form-control" placeholder="验证码" name="code"> -->
+                <!-- {:captcha_make('login','290')} -->
+                <label class="checkbox">
+                    <!-- <input type="checkbox" value="remember-me" name="auto" value="1"> 自动登录 -->
+                    <!-- <span class="pull-right">
+                        <a data-toggle="modal" href="#myModal">忘记密码?</a>
+                    </span> -->
+                </label>
+                <button class="btn btn-lg btn-login btn-block" type="submit" onclick="ajax_post('reset');return false;">提交</button>
+            </div>
+         </form>
+
+
+
+    </div>
+    </body>
+
+
+{/block}

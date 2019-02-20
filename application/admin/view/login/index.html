@@ -1,0 +1,46 @@
+{extend name="tpl:basic" /}
+{block name="content"}
+<div class="p-front__content">
+    <div class="p-signin">
+        <form class="p-signin__form" action="{:url('admin/login/login')}" id="login" >
+            <h2 class="p-signin__form-heading">用户认证</h2>
+            <div class="p-signin__form-content">
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label for="p-signin-work-email">用户名</label>
+                        <input type="text" class="form-control" id="p-signin-work-text" placeholder="请输入账号" name="username" name="password">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label for="p-signin-set-password">密码</label>
+                        <input type="password" class="form-control" id="p-signin-set-password" placeholder="请输入密码" name='password'>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <div class="fl-wrap fl-wrap-input"><label for="inputEmail4" class="fl-label">验证码</label><input type="text" class="form-control fl-input" id="inputEmail4" placeholder="验证码" data-placeholder="验证码" name="code"></div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        {:captcha_make('login','290')}
+                    </div>
+                    <label class=" custom-control custom-checkbox">
+                        <input type="checkbox" value="remember-me" class="custom-control-input"  name="auto" value="1" id="ch1">  <label class="custom-control-label" for="ch1">自动登录</label>
+
+                    </label>
+                    <label class=" custom-control span_login">
+                 <span class="pull-right">
+                        <a data-toggle="modal" href="#myModal">忘记密码?</a>
+                    </span>
+                    </label>
+                </div>
+                <div>
+                    <button type="submit" class="btn btn-info btn-block btn-lg p-signin__form-submit"  onclick="ajax_post('login');return false;">登录</button>
+                </div>
+
+            </div>
+        </form>
+    </div>
+
+</div>
+{/block}

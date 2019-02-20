@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>邮件</title>
+<style type="text/css">
+    *{
+        padding:0;
+        margin:0 auto;
+    }
+    body {
+        background-color:#ddd;
+        font-size:16px;
+        font-family:"微软雅黑";
+    }
+    #wrap{
+        width:600px;
+        padding-top:33px;
+        margin-top:30px;
+        background:#fff;
+    }
+    #top{
+        width:90%;
+        height:35px;
+        line-height:35px;
+        font-size:20px;
+        color:#838383;
+    }
+    #top img{
+        margin-right:14px;
+        float:left;
+    }
+    #top a{
+        font-size:18px;
+        color:#78787a;
+        font-family:"黑体";
+        float:right;
+    }
+    .row{
+        width:90%;
+        padding-top:30px;
+    }
+    .row-tittle{
+        color:#000;
+        font-weight:bold;
+    }
+    .row-word{
+        margin-top:30px;
+        color:#9a99a1;
+    }
+    .a{
+        color:#5aacd2;
+    }
+    #frame{
+        width:90%;
+        margin-top:30px;
+    }
+    .left{
+        color:#9a99a1;
+    }
+    #bottom{
+        width:90%;
+        color:#909090;
+        border-top:#dbdbdb 1px solid;
+        margin-top:30px;
+        padding:30px 0;
+    }
+    .right{
+        float:right;
+    }
+</style>
+</head>
+
+<body>
+<div style="background:#f9f9f9;padding:30px 0 50px 0 ;">
+    <div id="wrap" style="background:#fff;">
+        <div id="top"><img src="http://school.simplexun.com/static/flat/img/logo.png" />深普迅 <a href="#">{:config('cms.title')}</a></div>
+
+        <div class="row">
+            <div class="row-tittle">尊敬的{$name|default="，您好"}：</div>
+            <div class="row-word">
+                {$content}
+            </div>
+        </div>
+        <div id="bottom">
+            <span class="right">{:config('web.title')}</span>
+            <div style="clear:both"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+<div class="page-content__header">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+            <a>主页</a>
+        </li>
+        {volist name="data" id="vo"}
+        <li class="breadcrumb-item">
+            <a href="{:url($key,$vo[1])}">{$vo[0]}</a>
+        </li>
+        {/volist}
+    </ol>
+</div>
+<script>
+    $('.breadcrumb').children().last().addClass('active');
+</script>

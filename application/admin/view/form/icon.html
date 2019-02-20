@@ -1,0 +1,16 @@
+<div class="image-upload" id="{$config.prefix}{$name}">
+    <div class="image-item icon-selector">
+        <i class="{$config.value}" ></i>
+        <div class="image-item-edit icon-select">
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary" title="{:url('admin/extra/icon')}" onclick="open_icon_frame(this, this.title)">
+                    <i class="fa fa-edit"></i>
+                </button>
+                <button type="button" class="btn btn-info" onclick="$(this).parent().parent().prev().attr('class','');$('input[name=\'{$name}\']').val('')">
+                    <i class="fa fa-close"></i>
+                </button>
+            </div>
+        </div>
+        <input type="hidden" name="{$name}" value="{$config.value}" >
+    </div>
+</div>

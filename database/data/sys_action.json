@@ -1,0 +1,81 @@
+{
+"RECORDS":[
+{
+"id":1,
+"title":"管理员登陆系统",
+"name":"login",
+"condition":null,
+"log":"{:get_admin_info('username')} 登陆成功",
+"intro":null,
+"create_time":1494237899,
+"update_time":1494318979,
+"status":1
+},
+{
+"id":2,
+"title":"登陆失败",
+"name":"login_fail",
+"condition":null,
+"log":"用户尝试使用账号：{$username}，密码：{$password} 登陆失败",
+"intro":null,
+"create_time":1494319041,
+"update_time":1494321084,
+"status":1
+},
+{
+"id":3,
+"title":"图片上传",
+"name":"image_upload",
+"condition":null,
+"log":"{:get_admin_info('username')} 上传了图片 {$title}",
+"intro":null,
+"create_time":1494816760,
+"update_time":1494816760,
+"status":1
+},
+{
+"id":4,
+"title":"图片文件夹创建",
+"name":"image_folder_create",
+"condition":null,
+"log":"{:get_admin_info('username')} 在图片管理器创建了 {$title} 文件夹",
+"intro":null,
+"create_time":1494830060,
+"update_time":1494830060,
+"status":1
+},
+{
+"id":5,
+"title":"文件删除",
+"name":"file_manager_delete",
+"condition":null,
+"log":"{:get_admin_info('username')} 于文件管理器删除了 {[(id:{$id})\"{$title}\"]}",
+"intro":null,
+"create_time":1494899505,
+"update_time":1494899955,
+"status":1
+},
+{
+"id":6,
+"title":"消息通知成功",
+"name":"notice_send_success",
+"condition":null,
+"log":"TEST",
+"intro":"{:get_admin_info('username')} 发送了 [id:{$id}]标题为\"{$title}\"类型为{:get_conf($type,'mission.notice')}的消息",
+"create_time":1508579435,
+"update_time":1508579556,
+"status":1
+},
+{
+"id":7,
+"title":"消息通知失败",
+"name":"notice_send_fail",
+"condition":null,
+"log":"{:get_admin_info('username')} 未能发送 [id:{$id}]标题为\"{$title}\"类型为{:get_conf($type,'mission.notice')}的消息",
+"intro":null,
+"create_time":1508579459,
+"update_time":1508579583,
+"status":1
+}
+]
+}

@@ -1,0 +1,36 @@
+{__NOLAYOUT__}
+<div class="col-md-6 self-search">
+    <form action="" method="get" >
+        <div class="input-group full-width pull-right">
+            <input type="text" class="form-control" name="keyword" value="{:input('get.keyword')}" placeholder="输入要搜索的内容">
+            <div class="input-group-btn">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fa ua-icon-search"></i>
+                </button>
+                <button type="button" class="btn btn-info search-advance-btn">
+                    高级
+                    <span class="caret"></span>
+                </button>
+            </div>
+        </div>
+        <div class="card search-advance hide">
+            <div class="card-body">
+                {$ext}
+                {:widget('admin/Form/range',['start|end','日期',[]])}
+                {:widget('admin/Form/radio',['search_status','状态',[
+                'list'=> $status,
+                'value'=> input('get.search_status')
+                ]])}
+                <div class="form-group mt-3">
+                    <button class="btn btn-primary" type="submit">搜索</button>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+    $('.search-category li').click(function(){
+        $(this).parent().next().find('input').val( $(this).attr('data-value') )
+        $(this).parent().prev().html( $(this).text()+' <span class="caret"></span>' )
+    })
+</script>

@@ -1,0 +1,5 @@
+<div title="{$title}"  class="input-group" style="margin-bottom:0" >
+    <input type="{if condition="$config['hidden']" }hidden{else/}text{/if}" class="form-control time" id="select-date-ex1" placeholder="{if condition="!empty($config['placeholder'])"}{$config['placeholder']}{else/}{$title}{/if}" name="{$name}" value="{gt name='config.value' value='0' }{$config.value|date='Y-m-d H:i:s',###}{/gt}" {$config.validate} {if condition="$config['disabled']==true" } disabled{/if} readonly >
+
+</div>
+

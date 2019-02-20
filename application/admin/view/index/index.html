@@ -1,0 +1,16 @@
+{extend name="admin@tpl/frame"}
+{block name="script"}
+<script>
+    $(window).focus(function(){
+        $('#frame').focusin();
+    })
+    $('#frame').css('height', $(window).height() - $('.navbar').height() + 'px' )
+    $(document).keydown(function(e){
+        var code = e.keyCode;
+        if( code == 116  ){
+            e.preventDefault();
+            window.frames['frame'].location.reload();
+        }
+    })
+</script>
+{/block}

@@ -1,0 +1,9 @@
+<select title="{$title}"  id="{$config.prefix}{$name}" name="{$name}" data-init-plugin="select2"  class="full-width" multiple>
+    {volist name="config.list" id="vo"}
+    <option value="Jim">Jim</option>
+    {/volist}
+</select>
+<script>
+    if( typeof $().select2 == 'function' )
+        $('select').select2()
+</script>

@@ -1,0 +1,12 @@
+{__NOLAYOUT__}
+
+<div class="btn-group pull-left">
+    <button type="button" class="btn btn-success " onclick="open_add_form('{$position}','{:url(request()->module().'/'.$model."/create")}')" {$disabled} ><i class="fa fa-plus" style='padding-right:4px;'></i> 增加</button>
+
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+        <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu" role="menu">
+        {$action}
+    </ul>
+</div>

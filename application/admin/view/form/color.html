@@ -1,0 +1,23 @@
+<div class="input-group colorpicker-default color mb-1" data-color="{$config.value}" data-color-format="hex" style="display:flex;padding:0;margin-bottom:0;width: 150px;">
+            <input type="text" title="{$title}" class="form-control span2" placeholder="{if condition="!empty($config['placeholder'])"}{$config['placeholder']}{else/}{$title}{/if}" name="{$name}" value="{$config.value}" {$config.validate} {if condition="$config['disabled']==true" } disabled{/if}>
+            <button class="btn btn-default add-on" type="button">
+                <i style="padding: 10px; background-color: {$config.value};"></i>
+            </button>
+        </div>
+
+
+<!-- <div data-color-format="hex" data-color="{$config.value}" class="input-append colorpicker-default color" style="width:100px;">
+    <input title="{$title}" id="{$config.prefix}{$name}" type="text" readonly="true" class="form-control"  placeholder="{if condition="!empty($config['placeholder'])"}{$config['placeholder']}{else/}{$title}{/if}" name="{$name}" value="{$config.value}" {$config.validate} {if condition="$config['disabled']==true" } disabled{/if} >
+    <span class=" input-group-btn add-on">
+        <button class="btn btn-white" type="button" style="padding: 8px">
+            <i style="background-color: {$config.value};"></i>
+        </button>
+    </span>
+</div> -->
+
+<script>
+    if( typeof $().colorpicker == 'function' )
+        $('.colorpicker-default').colorpicker({
+            format: 'hex'
+        });
+</script>

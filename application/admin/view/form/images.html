@@ -1,0 +1,31 @@
+<div class="images-upload" id="{$config.prefix}{$name}">
+    <div class="images-preview">
+        {volist name="config.images" id="vo" }
+        <div class="images-preview-item" data-id="{$vo}">
+            {$vo|get_image=true}
+            <a href="javascript:" onclick="$(this).parent().remove();make_images_set_{$config.prefix}{$name}();"><i class="fa fa-remove"></i></a>
+        </div>
+        {/volist}
+        <div class="clearfix"></div>
+    </div>
+    <a href="{:url('admin/upload/manager',['extension'=>'image','wechat'=>$config['wechat']])}" class="images-upload-plus" onclick="open_file_modal(this, this.href, make_images_selector_{$config.prefix}{$name});return false;">
+        <i class='fa fa-plus text-success'></i>
+        <input type="hidden" name="{$name}" value="{$config.value}" >
+    </a>
+</div>
+<script>
+    var make_images_selector_{$config.prefix}{$name} = function(id, title, src, ext){
+        var html = '<div class="images-preview-item" data-id="'+id+'"> ' +
+            '<img src="'+src+'" alt="'+title+'"> ' +
+            '<a href="javascript:" onclick="$(this).parent().remove();make_images_set_{$config.prefix}{$name}();"><i class="fa fa-remove"></i></a> ' +
+            '</div>';
+        $('#{$config.prefix}{$name} .images-preview').children().last().before(html);
+        make_images_set_{$config.prefix}{$name}();
+    }
+    var make_images_set_{$config.prefix}{$name} = function(){
+        var ids = $('#{$config.prefix}{$name} .images-preview .images-preview-item').map(function(){
+            return $(this).attr('data-id');
+        }).get().join(',');
+        $('#{$config.prefix}{$name} input[name={$name}]').val(ids);
+    }
+</script>

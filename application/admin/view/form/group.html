@@ -1,0 +1,65 @@
+<div class="main-container tabs-alpha">
+    <ul class="nav nav-tabs tabs-alpha__nav-tabs">
+     {volist name="form" id="vo" }
+      <li class="nav-item tabs-alpha__item"  >
+            {if condition="isset($vo['value'])" }
+                {php}$key = $vo['value'];{/php}
+            {/if}
+        <a class="nav-link tabs-alpha__link  {if condition='$key == 0' }active{/if} " {if condition='isset($bind)' }onclick="form_group_bind('{$bind}','{$vo.value}')" id="nav-tabs-{$vo.value}"{/if} data-toggle="tab" href="#slide{$key}">{$vo.title}</a>
+      </li>
+     {/volist}
+    </ul>
+    {if condition='isset($bind_selected)' }
+        <input type="hidden" name="{$bind}" value="{$bind_selected}" />
+    {/if}
+    <div class="tab-content tabs-alpha__tab-content" style='padding:20px'>
+        <div style='height:20px;width: 100%'></div>
+        {$common|raw}
+        {volist name="form" id="vo" }
+            {if condition="isset($vo['value'])" }
+                {php}$key = $vo['value'];{/php}
+            {/if}
+            <div class="tab-pane modal-body_mx" id="slide{$key}" role="tabpanel" aria-expanded="true" style="padding:0;">{$vo.content|raw}</div>
+        {/volist}
+    </div>
+  </div>
+  <div class="col-sm-9">
+
+
+
+ </div>
+<script>
+    $('.tab-pane').eq(0).addClass('active')
+
+    $.each($('.form-group .control-label'),function(){
+        $(this).text( $(this).next().children().eq(0).attr('title')  );
+    })
+
+    function form_group_bind(field, bind){
+
+        $('.main-container a').removeClass('active');
+        $('#nav-tabs-'+bind).addClass('active');
+
+        $('#slide'+bind).addClass('active').siblings('.tab-pane').removeClass('active')
+        $('input[name='+field+']').val(bind)
+        $.each($('.tab-pane'),function(){
+            var obj = this;
+            $.each($(obj).find('input,textarea,select'),function(){
+
+                $(this).prop('disabled',true)
+            })
+        })
+
+        $.each($('#slide'+bind).find('input,textarea,select'),function(){
+            $(this).prop('disabled',false)
+        })
+    }
+</script>
+{if condition='isset($bind)' }
+<script>
+    $(function(){
+        var bind_value = $('input[name={$bind}').val();
+        form_group_bind('{$bind}', bind_value)
+    })
+</script>
+{/if}

@@ -1,0 +1,16 @@
+
+<div title="{$title}"  class="radio radio-success" {$config['value']}>
+        {volist name="config.list" id="vo" }
+        {if condition="is_array($vo)" }
+            <div class="custom-control custom-radio radio" title="{$title}" {$config['value']}>
+                <input type="radio" class="custom-control-input"  id="{$config.prefix}{$name}_{$key}" name="{$name}" value="{$vo['value']}" {if condition=" isset($vo['disabled']) && $vo['disabled'] == true"}disabled{/if} {if condition=" (isset($vo['checked']) && $vo['checked'] == true) || (isset($config['value']) && $config['value'] === $vo['value']) "}checked="checked"{/if}>
+                <label class="custom-control-label" for="{$config.prefix}{$name}_{$key}">{$vo['title']}</label>
+           </div>
+               {else /}
+            <div class="custom-control custom-radio radio" title="{$title}" {$config['value']}>
+                <input type="radio" class="custom-control-input"  id="{$config.prefix}{$name}_{$key}" name="{$name}" value="{$key}" {if condition="isset($config['value']) && (int)$config['value'] == $key "}checked="checked"{/if}>
+                <label class="custom-control-label" for="{$config.prefix}{$name}_{$key}" >{$vo}</label>
+            </div>
+               {/if}
+        {/volist}
+</div>

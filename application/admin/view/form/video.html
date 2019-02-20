@@ -1,0 +1,30 @@
+<div class="image-upload" id="{$config.prefix}{$name}">
+    <div class="image-item">
+        <div class="file-preview">
+            {if condition="$config['value']" }
+            <video src="{$config.value|get_file}" controls></video>
+            {else /}
+            <i class="fa fa-plus text-success"></i>
+            {/if}
+        </div>
+        <div class="image-item-edit">
+            <div class="btn-group">
+                <button type="button" class="btn btn-primary" title="{:url('admin/upload/manager',['extension'=>'video','wechat'=>$config['wechat']])}" onclick="open_file_modal(this, this.title, make_video_selector_{$config.prefix}{$name})">
+                    <i class="fa fa-edit"></i>
+                    <input type="hidden" name="{$name}" value="{$config.value}" >
+                </button>
+                <button type="button" class="btn btn-info" onclick="$(this).parent().parent().prev().html('<i class=\'fa fa-plus text-success\'></i>');$('input[name={$name}]').val('');">
+                    <i class="fa fa-close"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var make_video_selector_{$config.prefix}{$name} = function(id, title, src, ext){
+        $('input[name={$name}]').val(id);
+        $('#{$config.prefix}{$name} .file-preview').html(
+            '<video src="__UPLOAD__/files/'+src+'" controls alt="'+title+'" ></video>'
+        )
+    }
+</script>

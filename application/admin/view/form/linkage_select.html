@@ -1,0 +1,27 @@
+<div class="linkage-select" id="{$config.prefix}{$name}"  title="{$title}">
+    {volist name="arr" id="vo"}
+        <section><select class="full-width" onclick="linkage_select({$config.prefix}{$name}_table, {$config.prefix}{$name}_pid, {$config.prefix}{$name}_url, this, {$config.prefix}{$name}_parent)">
+            {volist name="$vo" id="item" }
+            <option value="{$item.id}" {if condition="isset($item['selected'])" }selected{/if} >{$item.title}</option>
+            {/volist}
+        </select></section>
+    {/volist}
+</div>
+<input type="hidden" name="{$name}" value="{$config.value}" >
+<script>
+
+    var {$config.prefix}{$name}_table = '{$config.table}';
+    var {$config.prefix}{$name}_pid = '{$config.pid}';
+    var {$config.prefix}{$name}_url = '{:url("admin/extra/linkage",[ "table"=>"__table__", "id"=>"__id__", "pid"=>"__pid__" ])}'
+    var {$config.prefix}{$name}_parent = "{$config.prefix}{$name}";
+
+    $(function(){
+        {if condition=" empty($arr)" }
+        linkage_select({$config.prefix}{$name}_table, {$config.prefix}{$name}_pid, {$config.prefix}{$name}_url, '', {$config.prefix}{$name}_parent);
+        {/if}
+
+        if( typeof $().select2 == 'function'){
+            $('select').select2()
+        }
+    })
+</script>

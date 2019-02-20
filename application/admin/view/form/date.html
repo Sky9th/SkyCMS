@@ -1,0 +1,1 @@
+<input title="{$title}" type="text" class="form-control date" id="{$config.prefix}{$name}" placeholder="{if condition="!empty($config['placeholder'])"}{$config['placeholder']}{else/}{$title}{/if}" name="{$name}" value="{gt name='config.value' value='0' }{$config.value|date='Y-m-d',###}{/gt}" {$config.validate} {if condition="$config['disabled']==true" } disabled{/if} readonly >

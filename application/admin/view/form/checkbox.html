@@ -1,0 +1,6 @@
+<div title="{$title}" class="checkbox check-success">
+    {volist name="config.list" id="vo" }
+    <input type="checkbox" value="{$vo['value']}" name="{$name}" id="{$config.prefix}{$name}_{$key}" {if condition="isset($vo['checked']) && $vo['checked'] == true"}checked="checked"{/if}  {if condition="isset($vo['disabled']) && $vo['disabled'] == true"}disabled{/if}  >
+    <label for="{$config.prefix}{$name}_{$key}">{$vo.title}</label>
+    {/volist}
+</div>

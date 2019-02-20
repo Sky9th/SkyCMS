@@ -1,0 +1,134 @@
+<div class="navbar navbar-light navbar-expand-lg">
+    <button class="sidebar-toggler" type="button">
+        <span class="ua-icon-sidebar-open sidebar-toggler__open"></span>
+        <span class="ua-icon-alert-close sidebar-toggler__close"></span>
+    </button>
+    <a href="#"><img src="__AIMG__/logo.png" alt="" class="navbar-brand__logo" style='margin-left:30px;'></a>
+    <a href="{:url('admin/index/index')}" class="logo">深普迅</a>
+    <!--   <span class="navbar-brand">
+        <span class="ua-icon-menu slide-nav-toggle" ></span>
+      </span> -->
+    <span class="navbar-brand-sm"><a href="/"><img src="__DIMG__/logo-sm.png" alt="" class="navbar-brand__logo"></a><span class="ua-icon-menu slide-nav-toggle"></span></span>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapse">
+        <span class="ua-icon-navbar-open navbar-toggler__open"></span>
+        <span class="ua-icon-alert-close navbar-toggler__close"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbar-collapse">
+        <div class="navbar__menu"></div>
+        <div class="dropdown navbar-dropdown">
+            <a class="dropdown-toggle navbar-dropdown-toggle navbar-dropdown-toggle__user" data-toggle="dropdown"
+               href="#">
+                <span class="navbar-dropdown__user-name">{:get_admin_info('realname')}</span>
+            </a>
+            <div class="dropdown-menu navbar-dropdown-menu navbar-dropdown-menu__user">
+                <a class="dropdown-item navbar-dropdown__item" href="#" data-toggle="modal"
+                   data-target="#userModal">资料</a>
+                <a class="dropdown-item navbar-dropdown__item" href="#" data-toggle="modal"
+                   data-target="#modal-settings">密码</a>
+                <a class="dropdown-item navbar-dropdown__item" href="{:url('/admin/logout')}">退出</a>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .custom-modal .modal-header:before {
+        height: 140%
+    }
+</style>
+<div id="userModal" class="modal fade custom-modal-tabs">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header has-border">
+                <h5 class="modal-title">修改资料</h5>
+                <div class="btn-group btn-collection nav custom-modal__header-tabs" role="group"
+                     aria-label="Basic example">
+
+                </div>
+                <button type="button" class="close custom-modal__close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="ua-icon-modal-close"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="main-container" action="{:url('admin/login/account')}" id='admin_info_form'>
+                    <div class="tab-content">
+                        {$admin_form}
+                    </div>
+
+                    <div class="modal-footer modal-footer--center">
+                        <button type="button" onclick="ajax_post('admin_info_form');return false;"
+                                class="btn btn-outline-info">提交
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div id="modal-settings" class="modal fade custom-modal-tabs">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header has-border">
+                <h5 class="modal-title">修改密码</h5>
+                <div class="btn-group btn-collection nav custom-modal__header-tabs" role="group"
+                     aria-label="Basic example">
+
+                </div>
+                <button type="button" class="close custom-modal__close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="ua-icon-modal-close"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form class="main-container" action="{:url('admin/login/password')}" id='admin_password_form'>
+                    <input type="hidden" name="_method" value="POST"/>
+                    <div class="tab-content">
+
+                        <div class="tab-pane fade show active" id="modal-settings-notifications">
+
+                            <div class="row">
+                                <div class="col-lg-6 input_col">
+                                    <div class="form-group">
+                                        <label for="input-device">旧密码</label>
+                                        <input type="password" class="form-control" id="input-device"
+                                               placeholder="请输入旧密码" name='oldpassword'>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6 input_col">
+                                    <div class="form-group">
+                                        <label for="input-device">新密码</label>
+                                        <input type="password" class="form-control" id="input-device"
+                                               placeholder="请输入新密码" name='password'>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-lg-6 input_col">
+                                    <div class="form-group">
+                                        <label for="input-type">确认密码</label>
+                                        <input type="password" class="form-control" id="input-device"
+                                               placeholder="请确认密码" name='repassword'>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer modal-footer--center">
+                        <button type="button" onclick="ajax_post('admin_password_form');return false;"
+                                class="btn btn-outline-info">提交
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+

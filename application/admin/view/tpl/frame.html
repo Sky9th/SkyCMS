@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+{include file="admin@public/config" }
+{block name="css" }{/block}
+<body class="js-loading"> <!-- add for rounded corners: form-controls-rounded -->
+{include file="admin@public/header"}
+<div class="page-wrap">
+    {include file="admin@public/sidebar"}
+    {block name="content" }
+    <div class="page-content">
+        <iframe id="frame" name="frame" src="{:url('admin/index/system')}" frameborder="0" style="width:100%;"></iframe>
+    </div>
+    {/block}
+</div>
+{include file="admin@public/script"}
+</body>
+</html>
+{block name="script" }{/block}

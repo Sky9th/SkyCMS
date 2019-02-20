@@ -1,0 +1,118 @@
+{extend name="admin@tpl:basic" /}
+{block name="content"}
+
+<div class="main-container container-fh__content">
+    <div class="card rounded">
+        <!--{if condition="isset($title)" }
+            <div class="panel-title">
+                <p><h2>{$title}</h2></p>
+            </div>
+        {/if}-->
+        <div class="clearfix"></div>
+        <div class="row">
+            {if condition="isset($quick)" }
+            <div class="col-md-6  quick-btn">
+                {$quick|raw}
+            </div>
+            {/if}
+            {if condition="isset($search)" }
+            {$search|raw}
+            {/if}
+            <div class="clearfix"></div>
+        </div>
+        <form action="" id="form-work-table" class="mb-3">
+            <table class="table table__actions">
+                <thead>
+                {$thead|raw}
+                </thead>
+                <tbody>
+                {$tbody|raw}
+                </tbody>
+            </table>
+        </form>
+    </div>
+    <div class="row">
+        {$page|raw}
+    </div>
+</div>
+<!-- MODAL STICK UP  -->
+{PHP}
+$action_info = get_current_action_info();
+{/PHP}
+<div class="modal fade stick-up modal-edit-form" id="simpleAddForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header has-border">
+                <h5 class="modal-title">{$action_info.title|default='修改资料'} <p>{$action_info.intro}</p></h5>
+                <div class="btn-group btn-collection nav custom-modal__header-tabs" role="group" aria-label="Basic example"></div>
+                <button type="button" class="close custom-modal__close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true" class="ua-icon-modal-close"></span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <form id="form-work-top" class="form-horizontal" role="form" autocomplete="off">
+                        <input type="hidden" name="_method" value="POST" />
+                        <div class="form-body">
+                            <div class="loading">
+                                <i class="fa fa-spin fa-circle-o-notch"></i>
+                            </div>
+                        </div>
+                        <div class="row m-t-10">
+                            <div class="col-sm-3">
+                                <p></p>
+                            </div>
+
+                            <div class="modal-footer modal-footer--center col-sm-12">
+                                <button type="button" onclick="ajax_post('form-work-top');return false;" class="btn btn-outline-info">提交
+                                </button>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- END MODAL STICK UP  -->
+
+<div class="modal fade slide-right modal-edit-form" id="modalSlideLeft" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content-wrapper">
+            <div class="modal-content table-block">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="pg-close fs-14"></i></button>
+                <div class="modal-header has-border">
+                    <h5 class="modal-title">{$action_info.title} <p>{$action_info.intro}</p></h5>
+                </div>
+                <div class="modal-body">
+                    <div class="card">
+                        <form id="form-work-right" class="form-horizontal" role="form" autocomplete="off">
+                            <input type="hidden" name="_method" value="POST" />
+                            <div class="form-body">
+                                <div class="loading">
+                                    <i class="fa fa-spin fa-circle-o-notch"></i>
+                                </div>
+                            </div>
+                            <div class="row m-t-10">
+                                <div class="col-sm-3">
+                                    <p></p>
+                                </div>
+                                <div class="modal-footer modal-footer--center col-sm-12">
+                                    <button type="button" onclick="ajax_post('form-work-right');return false;" class="btn btn-outline-info">提交
+                                    </button>
+                                </div>
+
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+{/block}
