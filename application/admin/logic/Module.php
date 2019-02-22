@@ -18,7 +18,7 @@ class Module extends Resource{
 
     public function _list(){
         $map = $this->_filter();
-        $list = $this->_model->where($map)->order('sort desc')->select()->toArray();
+        $list = $this->_model->where($map)->append(['status_badge'])->order('sort desc')->select()->toArray();
         $tree = list_to_tree($list);
         return $tree;
     }

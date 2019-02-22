@@ -10,6 +10,4 @@ namespace app\common\model;
 
 class Sys extends Common {
 
-    protected $prefix = 'sys_';
-
 }

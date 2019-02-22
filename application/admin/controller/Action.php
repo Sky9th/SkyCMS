@@ -31,7 +31,7 @@ class Action extends Resource{
                 'type' => 'text',
             ],
             '状态' => [
-                'field' => 'status',
+                'field' => 'status_badge',
                 'type' => 'text',
             ],
             '操作' => [

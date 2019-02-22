@@ -5,11 +5,10 @@
  * Date: 2019/1/16
  * Time: 15:36
  */
-
-\think\facade\Route::rest([
+/*\think\facade\Route::rest([
     'status' => ['PUT', '/status/:status/[:id]', 'status'],
     'detail' => ['GET', '/detail/:id', 'detail'],
-]);
+]);*/
 
 try{
     $src = db('sys_module')->where(['route'=>1,'type'=>0,'status'=>1])->field('id,name,src,module')->select();
@@ -19,25 +18,22 @@ try{
         $route =  $module.$item['src'];
         \think\facade\Route::rule($rule,$route);
     }
-
     $resource = db('sys_module')->field('name,resource,module')->where(['type'=>1,'status'=>1])->select();
     foreach ($resource as $key => $value) {
         $module = $value['module'] ? $value['module'].'/':'admin/';
         $rest = $module.$value['name'].'s';
         $control = $module.$value['name'];
-
-        \think\facade\Route::resource( $rest , $control );
+        //\think\facade\Route::resource( $rest , $control );
         \think\facade\Route::get($rest, $control.'/index');
-        /*\think\facade\Route::get($rest.'/create', $control.'/create');
+        \think\facade\Route::get($rest.'/create', $control.'/create');
         \think\facade\Route::post($rest, $control.'/save');
         \think\facade\Route::get($rest.'/:id', $control.'/read');
         \think\facade\Route::get($rest.'/:id/edit', $control.'/edit');
         \think\facade\Route::put($rest.'/:id', $control.'/update');
         \think\facade\Route::delete($rest.'/:id', $control.'/delete');
         \think\facade\Route::put($rest.'/status/:status/[:id]', $control.'/status');
-        \think\facade\Route::get($rest.'/detail/:id', $control.'/detail');*/
-
-        if( $value['resource'] ) {
+        \think\facade\Route::get($rest.'/detail/:id', $control.'/detail');
+        /*if( $value['resource'] ) {
             @eval('$_act=' . $value['resource'] . ';');
             if (!empty($_act)) {
                 $param = [];
@@ -58,7 +54,7 @@ try{
                 }
                 //\think\Route::resource($rest, $control, $only);
             }
-        }
+        }*/
     }
 }catch (Exception $e){
 }

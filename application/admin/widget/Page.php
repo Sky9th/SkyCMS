@@ -89,8 +89,7 @@ html;
             }else {
                 switch ($value['type']) {
                     case 'btn' :
-                            $last = '<th>操作</th>';
-
+                            $last = '<th style="text-align:right;padding-right:10px;">操作</th>';
                         break;
                     case 'text' :
                         $width = '';
@@ -207,7 +206,6 @@ html;
                     if( isset($fields[$k]['callback']) ){
                         $obj = $fields[$k]['callback'];
                         $str = call_user_func(array($obj[0], $obj[1]),$value[$v]);
-
                         $td .= <<<html
                 <td>{$front}{$str}</td>
 html;
@@ -221,12 +219,10 @@ html;
                         }else{
                             $str = call_user_func($fun,$value[$v]);
                         }
-
                         $td .= <<<html
                 <td>{$front}{$str}</td>
 html;
                     }else{
-
                         $td .= <<<html
                 <td>{$front}{$value[$v]}</td>
 html;
