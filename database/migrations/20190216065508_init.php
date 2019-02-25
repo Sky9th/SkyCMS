@@ -121,7 +121,7 @@ class Init extends Migrator
     public function sys_role(){
         $table = $this->table('sys_role',['engine'=>'MyISAM']);
         $table
-            ->addColumn('pid', 'integer', array('limit' => 11, 'comment'=>'父角色组'))
+            ->addColumn('pid', 'integer', array('limit' => 11, 'default'=>0, 'comment'=>'父角色组'))
             ->addColumn('title', 'string', array('limit' => 50, 'comment'=>'角色组名称'))
             ->addColumn('rules', 'text', array('comment'=>'权限节点'))
             ->addColumn('create_time', 'integer', array('limit' => 11, 'comment'=>''))
@@ -136,7 +136,7 @@ class Init extends Migrator
     public function common_area(){
         $table = $this->table('common_area',['engine'=>'MyISAM']);
         $table
-            ->addColumn('pid', 'integer', array('limit' => 11, 'comment'=>'父地区'))
+            ->addColumn('pid', 'integer', array('limit' => 11, 'default'=>0, 'comment'=>'父地区'))
             ->addColumn('title', 'string', array('limit' => 50, 'comment'=>'地区名称'))
             ->addColumn('sort', 'integer', array('default'=>0 ,'comment'=>'排序'))
             ->addColumn('create_time', 'integer', array('limit' => 11, 'comment'=>''))
@@ -152,7 +152,7 @@ class Init extends Migrator
         $table = $this->table('common_files',['engine'=>'MyISAM']);
         $table
             ->addColumn('user_id', 'integer', array('limit' => 11, 'comment'=>'用户ID'))
-            ->addColumn('pid', 'integer', array('limit' => 11, 'comment'=>'文件夹ID'))
+            ->addColumn('pid', 'integer', array('limit' => 11, 'default'=>0, 'comment'=>'文件夹ID'))
             ->addColumn('title', 'string', array('limit' => 50, 'comment'=>'文件名'))
             ->addColumn('src', 'string', array('limit' => 255, 'comment'=>'文件路径'))
             ->addColumn('ext', 'string', array('limit' => 20, 'comment'=>'文件类型'))
