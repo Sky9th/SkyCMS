@@ -22,7 +22,6 @@ class WechatUser extends Model{
     }
 
     public function getStatusAttr($value){
-        
         return get_config($value, 'static.status');
     }
 
