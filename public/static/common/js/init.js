@@ -34,10 +34,6 @@ $(function(){
         $(this).text( $(this).next().children().eq(0).attr('title')  );
     })
 
-    $('.colorpicker-default').colorpicker({
-        format: 'hex'
-    });
-
     moment.locale('zh-cn');
     $('.js-date-range').daterangepicker({
         autoUpdateInput: false,

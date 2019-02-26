@@ -1,0 +1,28 @@
+<?php
+return [
+    "title"=>"",
+    "account"=>"",
+    "oid"=>"",
+    "token"=>"",
+    "type"=>"",
+    "app_id"=>"",
+    "secret"=>"",
+    "mchid"=>"",
+    "key"=>"",
+    "debug"=>"1",
+    "log"=>[
+        "level"=>"debug",
+        "file"=>"./easywechat.log",
+    ],
+    "mch_app_id"=>"",
+    "mch_id"=>"",
+    "sub_mch_id"=>"",
+    "sub_app_id"=>"",
+    "encrypt"=>"0",
+    "aes_key"=>"",
+    "subscribe"=>[
+        "type"=>"text",
+        "value"=>"111",
+    ],
+]
+?>

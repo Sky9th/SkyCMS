@@ -1,0 +1,45 @@
+{extend name="admin@tpl:basic" /}
+{block name="content"}
+<div class="container-fluid sm-padding-10">
+    <div class="row">
+        {:widget('admin/tool/breadcrumb')}
+        <!-- /.col-lg-12 -->
+        <div class="col-lg-12 bg-white">
+            <div class="row user-sysn">
+                <div class="col-xs-12">
+                    <h3>同步结果</h3>
+                </div>
+                <div class="col-xs-12 m-t-50">
+                    <i id="success">
+                        0
+                    </i>
+                    <p>用户<span class="text-danger fs-15" title="同步失败数" id="fail" >(<em>0</em>)</span></p>
+                </div>
+            </div>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+</div>
+{/block}
+{block name="script"}
+<script type="text/javascript">
+    function sysn(next) {
+        loading();
+        var success = $('#success').text();
+        var error = $('#fail em').text();
+        ajax_submit({next:next},'','get','',function(data){
+            if( data.next ){
+                sysn(data.next);
+                success = parseInt(success) + parseInt(data.success)
+                error = parseInt(error) + parseInt(data.error)
+                $('#success').text(success);
+                $('#fail em').text(error);
+            }else{
+                loaded();
+                notification(1,'同步完成')
+            }
+        },'','',true)
+    }
+    sysn();
+</script>
+{/block}

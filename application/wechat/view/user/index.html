@@ -1,0 +1,11 @@
+{extend name="admin@tpl:data" /}
+{block name="content"}
+{:widget('admin/tool/control',[ $btn ])}
+{:widget('admin/tool/filter')}
+{:widget('admin/page/dataTable',[ $fields, $list])}
+{/block}
+{block name="script" }
+<script>
+    $('td').emoji();
+</script>
+{/block}

@@ -12,5 +12,6 @@
 // 应用容器绑定定义
 return [
     'sms' => \app\common\component\Sms::class,
-    'excel' => \app\common\component\Excel::class
+    'excel' => \app\common\component\Excel::class,
+    'wechat' => \app\common\component\Wechat::class
 ];
