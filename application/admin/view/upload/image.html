@@ -1,0 +1,41 @@
+<div class="modal-header clearfix text-left">
+    <h5>图片 <span class="semi-bold">上传</span></h5>
+    <p class="p-b-10">请上传格式为jpg,gif,png且大小不超过5M的图片</p>
+</div>
+<div class="modal-body">
+    <div id="zyupload" class="zyupload"></div>
+    <script type="text/javascript">
+        var url = "{:url('admin/upload/image',['pid'=>input('get.pid',0),'wechat'=>input('get.wechat')])}";
+        $(function(){
+            // 初始化插件
+            $("#zyupload").zyUpload({
+                width            :   "98%",                 // 宽度
+                height           :   "auto",                 // 宽度
+                itemWidth        :   "118px",                 // 文件项的宽度
+                itemHeight       :   "118px",                 // 文件项的高度
+                url              :   url,  // 上传文件的路径
+                fileType         :   ["jpg","png","gif"],// 上传文件的类型
+                fileSize         :   51200000,                // 上传文件的大小
+                multiple         :   true,                    // 是否可以多个文件上传
+                dragDrop         :   true,                    // 是否可以拖动上传文件
+                tailor           :   true,                    // 是否可以裁剪图片
+                del              :   true,                    // 是否可以删除文件
+                finishDel        :   false,  				  // 是否在上传文件完成后删除预览
+                /* 外部获得的回调接口 */
+                onSelect: function(selectFiles, allFiles){    // 选择文件的回调方法  selectFile:当前选中的文件  allFiles:还没上传的全部文件
+                },
+                onDelete: function(file, files){              // 删除一个文件的回调方法 file:当前删除的文件  files:删除之后的文件
+                },
+                onSuccess: function(file, response){          // 文件上传成功的回调方法
+                },
+                onFailure: function(file, response){          // 文件上传失败的回调方法
+                },
+                onComplete: function(response){           	  // 上传完成的回调方法
+                    $('#open_modal_image_upload').modal('hide');
+                    get_image_list(manager_page,manager_pid,manager_keyword);
+                }
+            });
+
+        });
+    </script>
+</div>

@@ -1,0 +1,233 @@
+{extend name="admin@tpl:basic" /}
+{block name="content" }
+<div class="panel panel-default m-b-0">
+    <div class="panel-heading">
+        <div class="panel-title">
+            <h2>文件上传</h2><span class="text-danger">PS:  图片必须小于5M</span>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="file-upload row">
+            <div class="col-xs-12 file_sc">
+                <div class="file-list row">
+                    <!--<div class="file-item col-xs-3">
+                        <div class="file-thumb">
+                            <a href="javascript:" class="file-status file-delete">
+                                <i class="fa fa-close"></i>
+                            </a>
+                            <a href="javascript:" class="file-status file-success">
+                                <i class="fa fa-check text-success"></i>
+                            </a>
+                            <i class="fa fa-file fa-file-text"></i>
+                            <div class="progress m-b-0">
+                                <div class="progress-bar progress-bar-success" style="width:55%"></div>
+                            </div>
+                        </div>
+                        <div class="file-name">
+                            测试文件.txt
+                        </div>
+                    </div>-->
+                </div>
+            </div>
+            <div class="col-xs-12 file_sc">
+                <div id="picker">选择文件</div>
+                <button id="ctlBtn" class="btn btn-default" type="button">开始上传</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END PANEL -->
+    <!--用来存放文件信息-->
+{/block}
+{block name="script" }
+<script>
+    $(function(){
+        var file_id = '';
+        var file_name = '';
+
+        var combine = [];
+        var uploader = WebUploader.create({
+            // 文件接收服务端。
+            server: "{:url('admin/upload/file',[ 'pid'=>input('pid'),'extension'=>input('extension'),'wechat'=>input('wechat')])}",
+            chunked: true,
+//            chunkSize : 52428,
+            // 选择文件的按钮。可选。
+            // 内部根据当前运行是创建，可能是input元素，也可能是flash.
+            pick: '#picker',
+            fileNumLimit: 12,
+            fileSizeLimit : 52428800,
+            // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
+            resize: false,
+            accept:{extensions: "{:config('static.extension')[input('extension','file')]}"}
+        });
+
+        // 当有文件添加进来的时候
+        uploader.on( 'filesQueued', function( files ) {
+            for(var i in files){
+                var type = '';
+                switch(files[i].type){
+                    case 'image/jpeg':
+                        type = 'image-o'
+                        break;
+                    case 'image/png':
+                        type = 'image-o'
+                        break;
+                    case 'image/gif':
+                        type = 'image-o'
+                        break;
+                }
+                var size = size_beauty(files[i].size);
+                var item = '<div id="'+files[i].id+'" class="file-item col-xs-3">' +
+                    '<div class="file-thumb">' +
+                    '   <a href="javascript:" class="file-status file-delete"> ' +
+                    '       <i class="fa fa-close text-danger"></i> ' +
+                    '   </a> ' +
+                    '   <a href="javascript:" class="file-status file-success hide"> ' +
+                    '       <i class="fa fa-check text-success"></i> ' +
+                    '   </a> ' +
+                    '   <a href="javascript:" class="file-status file-error hide"> ' +
+                    '       <i class="fa fa-info-circle text-warning"></i> ' +
+                    '   </a> ' +
+                    '   <i class="fa fa-file fa-file-'+type+'"></i>' +
+                    '   <div class="alert alert-danger m-b-0 hide" role="alert">上传失败</div> ' +
+                    '   <div class="progress m-b-0"> ' +
+                    '       <div class="progress-bar progress-bar-success" style="width:0%"></div> ' +
+                    '   </div> ' +
+                    '</div> ' +
+                    '<div class="file-name" title="'+files[i].name+'">'+files[i].name+'</div> ' +
+                    '<div class="file-size">'+size+'</div> ' +
+                    '</div>'
+                $('.file-list').append(item);
+            }
+            $('.file-delete').click(function () {
+                var id = $(this).parent().parent().attr('id');
+                uploader.removeFile(id,true);
+                $(this).parent().parent().remove();
+            })
+        });
+
+        $('#ctlBtn').click(function(){
+            uploader.upload();
+        })
+
+        uploader.on( 'startUpload', function () {
+            $('#ctlBtn').addClass('disabled')
+        })
+
+        uploader.on( 'uploadStart', function (file) {
+            var id = file.id;
+            $('#'+id).find('.file-delete').hide();
+        })
+
+        uploader.on( 'uploadProgress', function (file, percentage ) {
+            var id = file.id;
+            $('#'+id).find('.file-delete').hide();
+            $('#'+id).find('.progress-bar').css('width',percentage*100+'%');
+        })
+
+        uploader.on( 'uploadBeforeSend', function (object, data, headers) {
+            $.extend(data,{hash:object.file.__hash})
+        })
+
+        uploader.on( 'uploadSuccess', function (file, response) {
+            var id = file_id = response.id;
+            file_name = file.name;
+            if( response.status == '1'){
+                if( file.size > 5242880 ) {
+                    combine.push(file);
+                    $.ajax({
+                        url: '{:url("admin/upload/file",["pid"=>input("pid"),"wechat"=>input("wechat")])}',
+                        type: 'post',
+                        data: {hash: file.__hash, name: file.name, combine: true},
+                        success: function (data) {
+                            if (data.status != '1') {
+                                $('#' + id).find('.alert').removeClass('hide');
+                                $('#' + id).find('.progress-bar').addClass('progress-bar-danger');
+                            }
+                            if (data.status == '1') {
+                                for(var i in combine){
+                                    if ( combine[i].id == file.id ){
+                                        combine[i] = null;
+                                    }
+                                }
+                                $('#' + id).find('.file-success').removeClass('hide');
+                            }
+                        },
+                        error: function () {
+                            $('#' + id).find('.alert').removeClass('hide');
+                        }
+                    })
+                }else{
+                    $('#' + id).find('.file-success').removeClass('hide');
+                }
+            }else{
+                $('#'+id).find('.progress-bar').addClass('progress-bar-danger');
+                $('#'+id).find('.alert').removeClass('hide');
+            }
+        })
+
+        uploader.on( 'uploadError', function (file, code) {
+            var id = file.id;
+            $('#'+id).find('.progress-bar').addClass('progress-bar-danger');
+        })
+
+        uploader.on( 'uploadFinished', function () {
+            setInterval(function(){
+                var wait = false;
+                for(var i in combine){
+                    if( combine[i] != null ){
+                        wait = true;
+                    }
+                }
+                if( !wait ){
+                    setTimeout(function(){
+                        if( $('#refresh_image_list',window.parent.document).length > 0 ) {
+                            $('#refresh_image_list', window.parent.document).trigger('click');
+                        }else{
+                            var id = window.location.hash;
+                            $(id, window.parent.document).find('input[type=hidden]').val(file_id);
+                            $(id, window.parent.document).find('.file-preview').html( '<p>'+file_name+'</p>' );
+                        }
+                        var index = parent.layer.getFrameIndex(window.name); //先得到当前iframe层的索引
+                        parent.layer.close(index); //再执行关闭
+                    },1000)
+                }
+            },300)
+        })
+
+        uploader.on( 'error', function (type ) {
+            notification(0,'该文件不允许上传')
+        })
+    })
+
+    function size_beauty(size,level) {
+        var file_size = '';
+        if( !level ){
+            level = 1;
+        }
+        size = size / 1000;
+        if( size >= 100 && level < 6 ){
+            file_size = size_beauty(size,++level)
+        }else{
+            var d = '';
+            switch(level){
+                case 1:
+                    d = 'KB'
+                    break;
+                case 2:
+                    d = 'MB'
+                    break;
+                case 3:
+                    d = 'GB'
+                    break;
+                case 4:
+                    d = 'TB'
+                    break;
+            }
+            size = size.toFixed(2)
+            return String(size)+d;
+        }
+        return file_size;
+    }
+</script>
+{/block}

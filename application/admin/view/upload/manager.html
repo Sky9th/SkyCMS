@@ -1,0 +1,240 @@
+<div class="m-content__header">
+      <h4 class="m-content__heading heading">{eq name="type" value="0" }图片{else/}文件{/eq} <span class="semi-bold">管理器</span>
+      <BR>
+      <p class="p-b-10">对曾经上传过的文件进行管理，选择使用</p>
+      </h4>
+    </div>
+</div>
+<div class="modal-body">
+    <div class="manager">
+        <div class="row img">
+            <div class="col-xs-6">
+                <div class="btn-group">
+                    <button class="btn btn-default" onclick="get_image_list(1,manager_prefer_pid,manager_keyword,true)">
+                        <i class="fa fa-level-up"></i>
+                    </button>
+                    {neq name="type" value="image" }
+                    <button class="btn btn-success" title="{:url('admin/upload/file',[ 'pid'=>'__PID__','extension'=>input('extension'),'wechat'=>input('wechat')])}" onclick="open_frame(this.title.replace('__PID__',manager_pid),'700px','615px')">
+                        <i class="fa fa-upload"></i>
+                    </button>
+                    {/neq}
+                    {eq name="type" value="image" }
+                    <button class="btn btn-primary" title="{:url('admin/upload/image')}" onclick="open_modal(this.title,'image_upload', { pid:manager_pid, wechat:'{:input("wechat")}' }, 'info')">
+                    <i class="fa fa-picture-o"></i>
+                    </button>
+                    {/eq}
+                    <button class="btn btn-success disabled" id="file_manager_checked" disabled onclick="get_files_select()">
+                        <i class="fa fa-check"></i>
+                    </button>
+                    <button id="refresh_image_list" class="btn btn-default" onclick="get_image_list(manager_page,manager_pid,manager_keyword,true)">
+                        <i class="fa fa-refresh"></i>
+                    </button>
+                    <button class="btn btn-default" onclick="folder_create_toggle()">
+                        <i class="fa fa-folder"></i>
+                    </button>
+                    <div class="folder-create" style="width:200px;height: 60px">
+                        <form action="{:url('admin/upload/manager')}" method="post" id="folder_create">
+                            <input type="hidden" name="_method" value="PUT" >
+                            <input type="hidden" name="pid" value="">
+                            <div class="input-group full-width">
+                                <input type="text" class="form-control" name="folder" placeholder="输入文件夹名称">
+                                <span class="input-group-btn" >
+                                    <button class="btn btn-primary" type="button" onclick="create_folder(manager_pid)" style='height:36px;'>
+                                        <i class="fa fa-plus-circle"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </form>
+                    </div>
+                    <button class="btn btn-danger disabled" id="file_manager_delete" disabled onclick="delete_images()">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="col-xs-6">
+                <div class="input-group full-width">
+                    <div class="input-group full-width">
+                        <input type="text" class="form-control" name="keyword" placeholder="Search for...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-primary" type="button" onclick="get_image_list(manager_page,manager_pid,$('input[name=keyword]').val(),true)">搜索</button>
+                        </span>
+                    </div><!-- /input-group -->
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="col-sm-12 text-center">
+            <div class="progress-circle-indeterminate m-t-45">
+            </div>
+        </div>
+        <form id="manager_list" action="{:url('admin/upload/manager')}" method="post">
+            <input type="hidden" name="_method" value="DELETE">
+            <div class="manager-list row">
+            </div>
+        </form>
+        <div class="manager-page row">
+        </div>
+    </div>
+</div>
+<script>
+    var manager_breadcrumb = [];
+    var manager_pid = 0;
+    var manager_prefer_pid = 0;
+    var manager_page = 1;
+    var manager_keyword = '';
+    function get_image_list(page, pid, keyword, record) {
+        if( !record ) {
+            manager_breadcrumb.push(
+                {manager_prefer_pid: manager_pid, manager_pid: pid}
+            )
+        }
+        manager_prefer_pid = manager_pid;
+        for(var i in manager_breadcrumb){
+            if( manager_breadcrumb[i]['manager_pid'] == pid ){
+                manager_prefer_pid = manager_breadcrumb[i]['manager_prefer_pid']
+            }
+        }
+        manager_pid = pid;
+        manager_page = page;
+        manager_keyword = keyword;
+        $('.manager .progress-circle-indeterminate').show();
+        $('.manager .manager-list').html('');
+        $.ajax({
+            url : '{:url("admin/upload/manager")}',
+            type : 'post',
+            data: { page:page,pid:pid,keyword:keyword,wechat:'{:input("wechat")}',selector:'{:input("selector")}',extension:'{:input("extension")}' },
+            success: function (data) {
+                $('.manager .progress-circle-indeterminate').hide();
+                for(var i in data['info']['data']) {
+                    var _d = data['info']['data'][i];
+                    if ( _d['ext'] == 'jpg' ||_d['ext'] == 'png' ||_d['ext'] == 'gif'  ) {
+                        var list = '' +
+                            '<div class="col-xs-3 text-center"> ' +
+                            '<a href="javascript:" title="' + _d.title + '" onclick="get_file_select(this, \''+_d.id+'\', \''+_d.title+'\', $(this).find(\'img\').attr(\'src\'), \''+_d.ext+'\')"> ' +
+                            '<img src="/uploads/images/' + _d.src + '" alt="' + _d.title + '"> ' +
+                            '</a> ' +
+                            '<div class="custom-control custom-checkbox new_checkbox" title="' + _d.title + '"> ' +
+                            '<input name="ids[]" class="custom-control-input" type="checkbox" value="' + _d.id + '" id="file_manager_checkbox' + i + '"> ' +
+                            '<label class="custom-control-label" for="file_manager_checkbox' + i + '">' + _d.title + '</label> ' +
+                            '</div> ' +
+                            '</div>';
+                    }else if( _d['ext'] == 'folder' ) {
+                        var list = '' +
+                            '<div class="col-xs-3 text-center"> ' +
+                                '<a href="javascript:" title="' + _d.title + '" onclick="get_image_list(1, '+_d['id']+',\'\')"> ' +
+                                    '<i class="fa fa-folder text-info"></i>' +
+                                '</a> ' +
+                                '<div class="custom-control custom-checkbox new_checkbox" title="' + _d.title + '"> ' +
+                                    '<input name="ids[]" class="custom-control-input" type="checkbox" value="' + _d.id + '" id="file_manager_checkbox' + i + '"> ' +
+                                    '<label class="custom-control-label" for="file_manager_checkbox' + i + '">' + _d.title + '</label> ' +
+                                '</div> ' +
+                            '</div>';
+                    }else{
+                        var _c = '';
+                        switch(_d['ext']){
+                            case 'docx':
+                            case 'doc':
+                                _c = '-word-o'
+                                break;
+                            case 'xlsx':
+                            case 'xls':
+                                _c = '-excel-o'
+                                break;
+                            case 'zip':
+                            case 'rar':
+                            case '7z':
+                                _c = '-zip-o'
+                                break;
+                            case 'pdf':
+                                _c = '-pdf-o'
+                                break;
+                            case 'ppt':
+                                _c = '-powerpoint-o'
+                                break;
+                            case 'mp3':
+                            case 'amr':
+                                _c = '-sound-o'
+                                break;
+                            case 'mp4':
+                            case 'flv':
+                            case 'avi':
+                                _c = '-movie-o'
+                                break;
+                        }
+                        var list = '' +
+                            '<div class="col-xs-3 text-center"> ' +
+                                '<a href="javascript:" title="' + _d.title + '" onclick="get_file_select(this, \''+_d.id+'\', \''+_d.title+'\', $(this).find(\'i\').attr(\'src\'), \''+_d.ext+'\')"> ' +
+                                    '<i class="fa fa-file'+_c+'" src="' + _d.src + '"></i>' +
+                                '</a> ' +
+                                '<div class="custom-control custom-checkbox new_checkbox" title="' + _d.title + '"> ' +
+                                    '<input name="ids[]" class="custom-control-input" type="checkbox" value="' + _d.id + '" id="file_manager_checkbox' + i + '"> ' +
+                                    '<label class="custom-control-label" for="file_manager_checkbox' + i + '">' + _d.title + '</label> ' +
+                                '</div> ' +
+                            '</div>';
+                    }
+                    $('.manager .manager-list').append(list);
+                }
+                $('.manager .manager-page').html(data.page);
+                $('.manager .manager-page a').click(function(e){
+                    e.preventDefault();
+                    var param = $(this).attr('href').split('=');
+                    get_image_list(param[1],manager_pid,manager_keyword)
+                })
+            }
+        })
+    }
+    get_image_list(manager_page,manager_pid,manager_keyword);
+
+    var get_file_select_after_hide = true;
+    function get_file_select(obj, id, title, src, ext) {
+        if( typeof current_file_selector_callback == "function" ){
+            current_file_selector_callback(id, title, src, ext);
+        }else{
+            $(current_file_selector).find('input[type=hidden]').val(
+                $(obj).next().find('input[type=checkbox]').val()
+            );
+            $(current_file_selector).parent().parent().prev().html( $(obj).html()+'<p>'+$(obj).attr('title')+'</p>' );
+        }
+        if( get_file_select_after_hide )
+            $('#open_modal_image').modal('hide');
+    }
+
+    function get_files_select() {
+        get_file_select_after_hide = false;
+        $.each( $('input[name="ids[]"]:checked'), function(){
+            $(this).parent().prev().trigger('click')
+        })
+        $('#open_modal_image').modal('hide');
+    }
+
+    function folder_create_toggle() {
+        $('#folder_create input[name=pid]').val(manager_pid);
+        $('.manager .folder-create').fadeToggle()
+    }
+
+    function create_folder(pid) {
+        ajax_post('folder_create','',function(){
+            $('#folder_create input[name=keyword]').val('');
+            $('#folder_create input[name=folder]').val('');
+            $('#folder_create .folder-create').hide();
+            $('.manager .folder-create').hide()
+            get_image_list(1,pid,'')
+        })
+    }
+
+    function delete_images() {
+        ajax_post('manager_list', '' , function(){
+            get_image_list(manager_page,manager_pid,manager_keyword);
+        })
+    }
+
+    $(document).on('click','.manager-list .new_checkbox',function(){
+        if( $('.manager-list input[name="ids[]"]:checked').length > 0 ){
+            $('#file_manager_checked').removeClass('disabled').removeAttr('disabled')
+            $('#file_manager_delete').removeClass('disabled').removeAttr('disabled')
+        }else{
+            $('#file_manager_checked').addClass('disabled').attr('disabled',true)
+            $('#file_manager_delete').addClass('disabled').attr('disabled',true)
+        }
+    })
+</script>
