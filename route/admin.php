@@ -5,10 +5,6 @@
  * Date: 2019/1/16
  * Time: 15:36
  */
-/*\think\facade\Route::rest([
-    'status' => ['PUT', '/status/:status/[:id]', 'status'],
-    'detail' => ['GET', '/detail/:id', 'detail'],
-]);*/
 
 try{
     $src = db('sys_module')->where(['route'=>1,'type'=>0,'status'=>1])->field('id,name,src,module')->select();
