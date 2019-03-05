@@ -561,3 +561,29 @@ function get_config_val($val, $name){
     }
     return false;
 }
+
+/**
+ * 配置字符串生成
+ * @param $var
+ * @param int $level
+ * @return string
+ */
+function my_var_export($var, $level = 1){
+    $str = '['.PHP_EOL;
+    $indent = '';
+    $space = '  ';
+    for($i = 0 ; $i < $level ; $i++){
+        $indent .= $space;
+    }
+    foreach ($var as $key => $value) {
+        if(is_array($value)){
+            $level++;
+            $_s = my_var_export($value, $level);
+            $str .= "$indent\"$key\"" . '=>' . $_s .','. PHP_EOL;
+        }else {
+            $str .= "$indent\"$key\"" . '=>"' . $value . '",' . PHP_EOL;
+        }
+        $level = 1 ;
+    }
+    return $str.$indent.']' ;
+}
