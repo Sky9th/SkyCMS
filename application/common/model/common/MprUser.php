@@ -9,12 +9,12 @@ namespace app\common\model\common;
 
 use think\Model;
 
-class WechatUser extends Model{
+class MprUser extends Model{
 
-    protected $table = 'common_wechat_user';
+    protected $table = 'common_mpr_user';
 
     public function getNicknameAttr($value){
-        return json_decode($value);
+        return json_decode($value) ?  json_decode($value) : $value;
     }
 
     public function setNicknameAttr($value){
