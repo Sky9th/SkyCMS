@@ -11,6 +11,10 @@ use think\Model;
 
 class Common extends Model{
 
+    public $allowField = true;
+    public $visibleField = [];
+    public $order = 'id desc';
+
     public function getStatusTextAttr($value, $data)
     {
         $status = config('static.status_name');
@@ -21,6 +25,13 @@ class Common extends Model{
     {
         $status = config('static.status_badge');
         return $status[$data['status']];
+    }
+
+    public function getImage($image_id){
+        if(!$image_id){
+            return '';
+        }
+        return 'http://'.$_SERVER['HTTP_HOST'].get_image($image_id);
     }
 
 }
