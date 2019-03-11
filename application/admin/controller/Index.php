@@ -124,10 +124,6 @@ class Index extends Common
             '操作时间' => [
                 'field' => 'create_time',
                 'type' => 'text',
-            ],
-            '状态' => [
-                'field' => 'status',
-                'type' => 'text',
             ]
         ];
         $content = $page->make($fields, new \app\admin\logic\Resource(new Logs()), [], false);

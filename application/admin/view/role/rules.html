@@ -1,0 +1,60 @@
+<div class="row border-bottom pt-3 pb-3 {if condition="$config['hidden'] == true" }hide{/if}">
+<div class="col-2">
+    <h4 for="{$config.prefix}">权限节点</h4>
+</div>
+<div class="col-10">
+    <div class="rules" title="权限节点">
+        {php}$start=$end=0;{/php}
+        {volist name="json" id="vo"}
+        {if condition=" ($key) % 3 == 0 " }
+        {php}$start++;{/php}
+        <div class="row">
+            {/if}
+            <div id="check-tree-{$key}" class="check-tree col-xs-4"></div>
+            <input type="hidden" name="rules[{$key}]" class="rules-input" value="" >
+            {if condition=" ($key) % 3 == 2 " }
+            {php}$end++;{/php}
+        </div>
+        {/if}
+
+        {/volist}
+        {if condition=" $end < $start" }
+    </div>
+    {/if}
+</div>
+<input type="hidden" name="rules" value="{$config.value}" >
+<div class="clearfix"></div>
+</div>
+{volist name="json" id="vo"}
+<script>
+    $(function(){
+        var treeData = {$vo|raw};
+        $("#check-tree-{$key}").dynatree({
+            checkbox: true,
+            selectMode: 3,
+            children: treeData,
+            onSelect: function(select, node) {
+                get_dynatree_selected();
+                var val = '';
+                $.each($('.rules-input'),function(){
+                    val += val ? ','+$(this).val() : $(this).val();
+                })
+                $("input[name=rules]").val(val);
+            }
+        });
+    })
+</script>
+{/volist}
+<script>
+    function get_dynatree_selected() {
+        $.each($('.check-tree'),function(){
+            var selected = $(this).dynatree("getSelectedNodes")
+            var selKeys = $.map(selected, function(node) {
+                return node.data.key ;
+            });
+            $(this).next().val(selKeys.join(','))
+        })
+    }
+    //get_dynatree_selected();
+</script>
+</div>

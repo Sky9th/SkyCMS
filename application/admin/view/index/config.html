@@ -1,36 +1,24 @@
 {extend name="tpl:basic" /}
 {block name="content"}
-{PHP}
-$action_info = get_current_action_info();
-{/PHP}
-<div class="container-fluid sm-padding-10">
+<div class="main-container container-fh__content">
     <div class="row">
         <!-- /.col-lg-12 -->
         <div class="col-lg-12 bg-white">
-            <!-- START PANEL -->
-            <div class="panel panel-transparent ">
-                <div class="panel-body">
-                    <div class="col-5 title_name">
-                     <h3> {$action_info.title}</h3>
+            <form id="form-work-top" class="form-horizontal" role="form" autocomplete="off">
+                <input type="hidden" name="_method" value="POST" />
+                {$form|raw}
+                <div class="row m-t-10">
+                    <div class="col-sm-3">
+                        <p></p>
                     </div>
-                    <p>{$action_info.intro}</p>
-                    <form id="form-work-top" class="form-horizontal" role="form" autocomplete="off">
-                        <input type="hidden" name="_method" value="POST" />
-                        {$form|raw}
-                        <div class="row m-t-10">
-                            <div class="col-sm-3">
-                                <p></p>
-                            </div>
-                            <div class="col-sm-6">
-                                <div class="modal-footer modal-footer--center">
-                                    <button type="button" onclick="ajax_post('form-work-top');return false;" class="btn btn-outline-info">提交
-                                    </button>
-                                </div>
-                            </div>
+                    <div class="col-sm-6">
+                        <div class="modal-footer modal-footer--center">
+                            <button type="button" onclick="ajax_post('form-work-top');return false;" class="btn btn-outline-info">提交
+                            </button>
                         </div>
-                    </form>
+                    </div>
                 </div>
-            </div>
+            </form>
             <!-- END PANEL -->
         </div>
         <!-- /.col-lg-12 -->

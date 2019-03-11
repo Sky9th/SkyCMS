@@ -28,7 +28,7 @@ class Resource extends Common
     //引入css
     protected $_css ;
     //表单类型
-    protected $_position = 'right' ;
+    protected $_position = 'page' ;
     //按钮设置
     protected $_btn = [] ;
 

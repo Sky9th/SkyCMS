@@ -105,6 +105,11 @@ class Module extends Resource{
                 }
             }
             $list[$key]['param'] = $ext;
+            if($value['type'] == '0'){
+                $list[$key]['url'] = url(($value['module'] ? : 'admin') . '/' . $value['src'], $ext);
+            }else{
+                $list[$key]['url'] = ($value['module'] ? : 'admin') . '/' . $value['name'].'s';
+            }
         }
         $list = $list->toArray();
         $tree = list_to_tree($list);

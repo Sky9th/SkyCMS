@@ -8,8 +8,6 @@
 
 namespace app\common\controller;
 
-use app\admin\widget\Email;
-use app\admin\widget\Sms;
 use EasyWeChat\Factory;
 use think\Controller;
 use think\Db;

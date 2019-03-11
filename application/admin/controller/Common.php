@@ -48,10 +48,5 @@ class Common extends Controller {
         }
 
         $this->assign('action_info', get_current_action_info());
-        $this->route();
-    }
-
-    public function route(){
-
     }
 }

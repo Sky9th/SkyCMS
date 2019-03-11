@@ -1,90 +1,38 @@
 
-    <div class="sidebar-section">
-  <div class="sidebar-section__scroll">
-
-
-    <!-- <div class="sidebar-user-a">
-      <img src="__DIMG__/users/user-19.png" alt="" class="sidebar-user-a__avatar rounded-circle">
-      <div class="sidebar-user-a__name">Martha Howard</div>
-      <div class="sidebar-user-a__desc">Product Manager</div>
-
-      <a href="#" class="btn icon-left sidebar-user-a__link">
-        Personal Account <span class="btn-icon ua-icon-user-solid"></span>
-      </a>
-    </div> -->
-
-    <div>
-      <div class="sidebar-section__separator">菜单</div>
-      <ul class="sidebar-section-nav">
-         {volist name="sidebar" id="vo"}
-        {php}$module = $vo['module']? $vo['module'].'/':'admin/';{/php}
-
-        <li class="sidebar-section-nav__item">
-
-          <a
-          {notempty name="vo._child" }
-           class="sidebar-section-nav__link sidebar-section-nav__link-dropdown"
-          {else/}
-           class="sidebar-section-nav__link"
-          {/notempty}
-          {if condition="empty($vo['_child'])"}
-                   href="{:url($module.$vo['src'],$vo['param'])}"
-                   onclick="return location_frame(this)"
-                   {else/}
-                   href="javascript:"
-          {/if}>
-            <span class="sidebar-section-nav__item-icon {$vo['icon']}"></span>
-            <span class="sidebar-section-nav__item-text">{$vo.title}</span>
-            <!-- <span class="badge sidebar-section-nav__badge">2</span> -->
-          </a>
-
-          {notempty name="vo._child" }
-          <ul class="sidebar-section-subnav">
-            {volist name="vo._child" id="item" }
-            {php}$module = $item['module']? $item['module'].'/':'admin/';{/php}
-            <li class="sidebar-section-subnav__item"><a class="sidebar-section-subnav__link" href="{:url($module.$item['src'],$item['param']) }" onclick="return location_frame(this)">{$item.title}</a></li>
-             {/volist}
-          </ul>
-          {/notempty}
-        </li>
-       <!--  <li class="sidebar-section-nav__item">
-          <a class="sidebar-section-nav__link" href="draggable-panels.html">
-            <span class="sidebar-section-nav__item-icon iconfont-control-panel"></span>
-            <span class="sidebar-section-nav__item-text">Draggable Panels</span>
-          </a>
-        </li> -->
-
-
-       {/volist}
-    </ul>
-
-
-
-
-
-
-
-
-
-
+<div class="sidebar-section">
+    <div class="sidebar-section__scroll">
+        <div>
+            <div class="sidebar-section__separator">菜单</div>
+            <ul class="sidebar-section-nav">
+                {volist name="sidebar" id="vo"}
+                <li class="sidebar-section-nav__item">
+                    <a  {notempty name="vo._child"}
+                            class="sidebar-section-nav__link sidebar-section-nav__link-dropdown"
+                            {else/}
+                            class="sidebar-section-nav__link"
+                        {/notempty}
+                        {if condition="empty($vo['_child'])"}
+                            href="{$vo.url}"
+                            onclick="return location_frame(this)"
+                            {else/}
+                            href="javascript:"
+                        {/if}>
+                        <span class="sidebar-section-nav__item-icon {$vo['icon']}"></span>
+                        <span class="sidebar-section-nav__item-text">{$vo.title}</span>
+                        <!-- <span class="badge sidebar-section-nav__badge">2</span> -->
+                    </a>
+                    {notempty name="vo._child" }
+                    <ul class="sidebar-section-subnav">
+                        {volist name="vo._child" id="item" }
+                        <li class="sidebar-section-subnav__item"><a class="sidebar-section-subnav__link" href="{$item.url}" onclick="return location_frame(this)">{$item.title}</a></li>
+                        {/volist}
+                    </ul>
+                    {/notempty}
+                </li>
+                {/volist}
+            </ul>
+        </div>
     </div>
-
-
-    </ul>
-  </div>
-
-    <!--<div class="sidebar-section-nav__footer">
-      <ul class="sidebar-section-nav">
-        <li class="sidebar-section-nav__item sidebar-section-nav__item-btn mb-4">
-          <a href="#" class="btn btn-info btn-block">Create project</a>
-        </li>
-      </ul>
-      <div class="sidebar__collapse">
-        <span class="icon ua-icon-collapse-left-arrows"></span>
-      </div>
-    </div>
-  </div>
-  -->
 </div>
 
 

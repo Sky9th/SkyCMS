@@ -5,3 +5,7 @@
 /vendor
 .env
 .DS_Store
+/config/database.php
+/mpr/utils/env.development.js
+/public/.htaccess
+/runtime

@@ -587,3 +587,38 @@ function my_var_export($var, $level = 1){
     }
     return $str.$indent.']' ;
 }
+
+
+/**
+ * 根据最底层id复原各级联动数组
+ * @param string $table 数据来源表
+ * @param int $value 底层id
+ * @param string $pid 父键
+ * @param array $result 数据集
+ * @param bool $first 是否首次调用递归
+ * @return array
+ */
+function rollback_linkage($table, $value, $pid = 'pid', $result = [], $first = true){
+    $cur = \think\Db::table($table)->find($value);
+    $data = \think\Db::table($table)->where(['pid' => $cur[$pid]])->select();
+    array_unshift($data,['id'=>'','title'=>'无']);
+    if( $data && $cur ){
+        $last = \think\Db::table($table)->where(['id' => $cur[$pid]])->find();
+        foreach ($data as $key => $v) {
+            if( $v['id'] == $cur['id'] ){
+                $data[$key]['selected'] = true;
+            }
+        }
+        if( $last ) {
+            $result = array_merge($result,rollback_linkage($table, $last['id'], $pid, $result, false));
+        }
+    }
+    $result[$value] = $data;
+    if( $first ){
+        $data = \think\Db::table($table)->where(['pid' => $cur['id']])->select();
+        array_unshift($data,['id'=>'','title'=>'无']);
+        $result[$cur['pid']] = $data;
+    }
+    return $result;
+
+}
