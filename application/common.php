@@ -189,7 +189,7 @@ function get_image($id, $html = false, $first = false , $width = '', $height  = 
         }
         return get_images($ids);
     }else {
-        $model = new \app\common\model\common\Files();
+        $model = new \app\common\model\common\File();
         $file = $model->find($id);
         $src = str_replace('\\','/', $file['src']);
         if ($file) {
@@ -220,7 +220,7 @@ function get_image($id, $html = false, $first = false , $width = '', $height  = 
  */
 function get_images($ids){
     $imgs = [];
-    $model = new \app\common\model\common\Files();
+    $model = new \app\common\model\common\File();
     $file = $model->where('id','in', $ids)->select();
     foreach ( $file as $key=>$value){
         if (is_file("./uploads/images/" . $value['src'])) {
@@ -238,7 +238,7 @@ function get_images($ids){
  * @return string
  */
 function get_file($id, $html = false, $prefix = true){
-    $model = new \app\common\model\common\Files();
+    $model = new \app\common\model\common\File();
     $file = $model->find($id);
     if( !$file ){
         if( $html ){
@@ -306,7 +306,7 @@ function get_file($id, $html = false, $prefix = true){
  * @return string
  */
 function get_files($id, $html = false, $prefix = true){
-    $model = new \app\common\model\common\Files();
+    $model = new \app\common\model\common\File();
     $file = $model->find($id);
     if( !$file ){
         if( $html ){
