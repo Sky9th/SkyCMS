@@ -6,8 +6,17 @@
  */
 
 namespace app\admin\logic;
+use app\common\model\Common;
 use think\Model;
+use think\Validate;
 
+/**
+ * 资源逻辑层
+ * Class Resource
+ * @property Common $_model
+ * @property Validate $_validate
+ * @package app\admin\logic
+ */
 class Resource extends Model {
 
     public $_model ;
@@ -18,7 +27,6 @@ class Resource extends Model {
         $this->_model = $model;
         $this->_validate = $validate;
     }
-
 
     /**
      * 资源类控制器固定列表
@@ -70,7 +78,7 @@ class Resource extends Model {
             }
         }
         $app_log = app_log(0,  $ids, 'delete', $this->_model, '', true);
-        if( $this->_model->where(['id'=>['in',$ids]])->delete() ){
+        if( $this->_model->where('id','in',$ids)->delete() ){
 
             if( method_exists($this->_model, '_after_delete') ){
                 $res = $this->_model->_after_delete($ids);
@@ -99,7 +107,7 @@ class Resource extends Model {
                 return $res;
             }
         }
-        if( $this->_model->save(['status'=>$status],['id'=>['in',$ids]]) ){
+        if( $this->_model->save(['status'=>$status],['id'=>$ids]) ){
             app_log(0,  $ids, 'status', $this->_model);
             return success(lang('success'),'','self');
         }else{

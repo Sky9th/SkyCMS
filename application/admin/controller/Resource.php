@@ -10,6 +10,13 @@ use app\admin\widget\Form;
 use app\admin\widget\Page;
 use app\admin\widget\Tool;
 
+/**
+ * 资源控制器
+ * Class Resource
+ * @property \app\admin\logic\Resource $_logic
+ * @property \app\common\model\Common $_model
+ * @package app\admin\controller
+ */
 class Resource extends Common
 {
 
@@ -102,9 +109,7 @@ class Resource extends Common
                 ]
             ];
             $content = $form->make($this->_forms, $data);
-            $tool = new Tool();
-            $breadcrumb = $tool->breadcrumb();
-            return view('admin@page/form', ['content' => $content, 'breadcrumb' => $breadcrumb , '_js_' => $this->_js, '_css_' => $this->_css ] );
+            return view('admin@page/form', ['content' => $content, 'breadcrumb' => '' , '_js_' => $this->_js, '_css_' => $this->_css ] );
         }else {
             $content = $form->make($this->_forms, $data);
 

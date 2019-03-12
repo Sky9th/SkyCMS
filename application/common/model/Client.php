@@ -8,7 +8,4 @@
 namespace app\common\model;
 
 class Client extends Common {
-
-
-
 }

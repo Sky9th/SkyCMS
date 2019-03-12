@@ -1,6 +1,4 @@
 <?php
-\think\facade\Route::rest('status',['PUT', '/status/:status', 'status']);
-\think\facade\Route::rest('detail',['GET', '/detail/:id', 'detail']);
 
 return [
     // 全局变量规则
