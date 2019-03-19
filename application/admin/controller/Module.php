@@ -11,7 +11,7 @@ class Module extends Resource
     protected function initialize(){
         $this->_position = 'top';
         $this->_model = new _Model();
-        $this->_logic = new _Logic($this->_model, new \app\common\validate\Module());
+        $this->_logic = new _Logic($this->_model, new \app\common\validate\sys\Module());
         $this->_fields = [
             'checkbox' ,
             '编号' => [

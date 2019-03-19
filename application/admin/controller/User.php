@@ -14,8 +14,8 @@ class User extends Resource{
 
     protected function initialize(){
 
-        $this->_model = new \app\admin\model\User();
-        $this->_logic = new \app\admin\logic\Admin($this->_model, new \app\common\validate\Admin());
+        $this->_model = new \app\common\model\common\User();
+        $this->_logic = new \app\admin\logic\Admin($this->_model, new \app\common\validate\common\User());
         $this->_fields = [
             'checkbox' ,
             '编号' => [
@@ -144,8 +144,8 @@ class User extends Resource{
             'disabled',
             [
                 'name'=>'授权',
-                'batch'=>'<li><a class="dropdown-item" href="'.url('admin/admin/access').'" onclick="open_modal(this.href);return false;">%name%</a></li>',
-                'single'=>'<li><a class="dropdown-item" href="'.url('admin/admin/access',['id'=>'__ID__']).'"  onclick="open_modal(this.href);return false;">%name%</a></li>'
+                'batch'=>'<li><a class="dropdown-item" href="'.url('admin/user/access').'" onclick="open_modal(this.href);return false;">%name%</a></li>',
+                'single'=>'<li><a class="dropdown-item" href="'.url('admin/user/access',['id'=>'__ID__']).'"  onclick="open_modal(this.href);return false;">%name%</a></li>'
             ],
         ];
         $content = $page->make($this->_fields, $this->_logic, [], $control, $this->_position, $this->_js, $this->_css);
@@ -163,7 +163,7 @@ class User extends Resource{
             }
             return $this->_model->relationAdminRole($id,$ids);
         }
-        $role = new \app\admin\logic\Role(new \app\admin\model\Role());
+        $role = new \app\admin\logic\Role(new \app\common\model\sys\Role());
         $roles = $role->_list();
         foreach ($roles as $key => $value) {
             $item = [

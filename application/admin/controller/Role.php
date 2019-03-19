@@ -13,7 +13,7 @@ class Role extends Resource
     protected function initialize(){
 
         $this->_model = new _Model();
-        $this->_logic = new _Logic($this->_model,new \app\common\validate\Role());
+        $this->_logic = new _Logic($this->_model,new \app\common\validate\sys\Role());
         $this->_fields = [
             'checkbox' ,
             '编号' => [

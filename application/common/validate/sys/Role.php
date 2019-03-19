@@ -5,7 +5,7 @@
  * Date: 2017/4/19
  * Time: 13:47
  */
-namespace app\common\validate;
+namespace app\common\validate\sys;
 
 use think\Validate;
 
