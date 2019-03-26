@@ -50,12 +50,12 @@
             // 文件接收服务端。
             server: "{:url('admin/upload/file',[ 'pid'=>input('pid'),'extension'=>input('extension'),'wechat'=>input('wechat')])}",
             chunked: true,
-//            chunkSize : 52428,
+            chunkSize : 52428800,
             // 选择文件的按钮。可选。
             // 内部根据当前运行是创建，可能是input元素，也可能是flash.
             pick: '#picker',
             fileNumLimit: 12,
-            fileSizeLimit : 52428800,
+            fileSizeLimit : 524288000,
             // 不压缩image, 默认如果是jpeg，文件上传前会压缩一把再上传！
             resize: false,
             accept:{extensions: "{:config('static.extension')[input('extension','file')]}"}
@@ -130,9 +130,11 @@
         })
 
         uploader.on( 'uploadSuccess', function (file, response) {
+            console.log(file)
+            console.log(response)
             var id = file_id = response.id;
             file_name = file.name;
-            if( response.status == '1'){
+            if( response.code == '1'){
                 if( file.size > 5242880 ) {
                     combine.push(file);
                     $.ajax({
@@ -140,11 +142,11 @@
                         type: 'post',
                         data: {hash: file.__hash, name: file.name, combine: true},
                         success: function (data) {
-                            if (data.status != '1') {
+                            if (data.code != '1') {
                                 $('#' + id).find('.alert').removeClass('hide');
                                 $('#' + id).find('.progress-bar').addClass('progress-bar-danger');
                             }
-                            if (data.status == '1') {
+                            if (data.code == '1') {
                                 for(var i in combine){
                                     if ( combine[i].id == file.id ){
                                         combine[i] = null;
@@ -195,8 +197,14 @@
             },300)
         })
 
-        uploader.on( 'error', function (type ) {
-            notification(0,'该文件不允许上传')
+        uploader.on( 'error', function (type, msg) {
+            switch (type) {
+                case 'Q_EXCEED_SIZE_LIMIT':
+                    notification(0,'该文件超出大小限制');
+                    break;
+                default:
+                    notification(0,'该文件不允许上传')
+            }
         })
     })
 

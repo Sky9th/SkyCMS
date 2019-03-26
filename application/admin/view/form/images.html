@@ -2,9 +2,7 @@
     <div class="images-preview">
         {volist name="config.images" id="vo" }
         <div class="images-preview-item" data-id="{$vo}">
-            <a href="javascript:" onclick="make_images_left_{$config.prefix}{$name}(this);" style="left:5px;"><i class="fa fa-arrow-left"></i></a>
-            <a href="javascript:" onclick="make_images_right_{$config.prefix}{$name}(this);" style="left:40px"><i class="fa fa-arrow-right"></i></a>
-            <img src="{$vo|get_image}" alt="">
+            {$vo|get_image=true}
             <a href="javascript:" onclick="$(this).parent().remove();make_images_set_{$config.prefix}{$name}();"><i class="fa fa-remove"></i></a>
         </div>
         {/volist}
@@ -29,25 +27,5 @@
             return $(this).attr('data-id');
         }).get().join(',');
         $('#{$config.prefix}{$name} input[name={$name}]').val(ids);
-    }
-    var make_images_left_{$config.prefix}{$name} = function(obj){
-        if($(obj).parent().prev().length > 0) {
-            $(obj).parent().prev().before($(obj).parent().clone())
-            $(obj).parent().remove()
-            var ids = $('#{$config.prefix}{$name} .images-preview .images-preview-item').map(function () {
-                return $(this).attr('data-id');
-            }).get().join(',');
-            $('#{$config.prefix}{$name} input[name={$name}]').val(ids);
-        }
-    }
-    var make_images_right_{$config.prefix}{$name} = function(obj){
-        if($(obj).parent().next('.images-preview-item').length > 0) {
-            $(obj).parent().next().after($(obj).parent().clone())
-            $(obj).parent().remove()
-            var ids = $('#{$config.prefix}{$name} .images-preview .images-preview-item').map(function () {
-                return $(this).attr('data-id');
-            }).get().join(',');
-            $('#{$config.prefix}{$name} input[name={$name}]').val(ids);
-        }
     }
 </script>

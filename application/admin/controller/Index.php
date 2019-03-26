@@ -238,6 +238,31 @@ class Index extends Common
                     ],
                 ],
             ],
+            [
+                'title' => '经验值设置',
+                'group' => [
+                    'web[buy]' => [
+                        'title' => '购买途径',
+                        'type' => 'input'
+                    ],
+                    'web[poster]' => [
+                        'title' => '发帖',
+                        'type' => 'input'
+                    ],
+                    'web[reply]' => [
+                        'title' => '回帖',
+                        'type' => 'input'
+                    ],
+                    'web[sign]' => [
+                        'title' => '签到',
+                        'type' => 'input'
+                    ],
+                    'web[howgetexperience]' => [
+                        'title' => '如何获得经验值？',
+                        'type' => 'textarea'
+                    ],
+                ],
+            ],
 
         ];
         $config = [
@@ -245,6 +270,7 @@ class Index extends Common
             'cms' => config('cms.'),
             'sms' => config('sms.'),
             'mail' => config('mail.'),
+            'web' => config('web.'),
         ];
         $data = [];
         foreach ($config as $key => $value) {

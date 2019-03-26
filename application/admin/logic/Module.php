@@ -7,7 +7,7 @@
 namespace app\admin\logic;
 
 use app\common\model\sys\Module as ModuleModel;
-use app\common\validate\Module as ModuleValidate;
+use app\common\validate\sys\Module as ModuleValidate;
 
 class Module extends Resource{
 

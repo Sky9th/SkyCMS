@@ -68,12 +68,12 @@ class Upload extends Controller{
         if(request()->isDelete()){
             $delete = input('delete.');
             $ids = $delete['ids'];
-            $children = $file->where(['pid' => ['in',$ids]])->count();
+            $children = $file->where(['pid' => $ids])->count();
             if( $children > 0 ){
                 return error('子文件夹存在内容，无法删除');
             }else{
-                $app_log = app_log(1,  $ids, 'file_manager_delete', 'files', '', true);
-                $res = $file->where(['id' => ['in',$ids]])->delete();
+                $app_log = app_log(1,  $ids, 'file_manager_delete', 'common_file', '', true);
+                $res = $file->where(['id' => $ids])->delete();
                 if( $res ){
                     $app_log->save();
                     return success(lang('success'));
@@ -103,31 +103,43 @@ class Upload extends Controller{
                 // 移动到框架应用根目录/public/uploads/ 目录下
                 $info = $file->move($tmp.$dir, $name.'.'.$chunk, true);
                 if ($info) {
-                    return json(success('上传成功'));
+                    return json(success('上传成功', $info));
                 } else {
                     return json(error($file->getError()));
                 }
             }else if( input('combine') ){
+
                 $path = env('ROOT_PATH') . 'public' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'files';
                 $dir = str_replace('-', '0', input('hash'));
-                $chunks = $this->getFile($tmp.$dir);
                 $old_name = $tmp.$dir.DIRECTORY_SEPARATOR.input('name');
+                $chunks = $this->getFile($tmp.$dir);
                 $explode = explode('.',input('name'));
                 $ext = end($explode);
-                foreach ($chunks as $key => $value) {
-                    $size = file_put_contents($old_name, file_get_contents($tmp.$dir.DIRECTORY_SEPARATOR.$value), FILE_APPEND);
-                    if( !$size ){
-                        if( is_file($old_name) ){
-                            unlink($old_name);
+
+                if (!file_exists($old_name)) fopen($old_name, "w");
+                $out = @fopen($old_name, "wb");
+                if (flock($out, LOCK_EX)) {
+                    foreach ($chunks as $b) {
+                        // 读取文件
+                        if (!$in = @fopen($tmp.$dir.DIRECTORY_SEPARATOR.$b, "rb")) {
+                            break;
                         }
-                        return json(error('文件合并失败'));
+                        // 写入文件
+                        while ($buff = fread($in, 52428800)) {
+                            fwrite($out, $buff);
+                        }
+                        @fclose($in);
+                        @unlink($tmp.$dir.DIRECTORY_SEPARATOR.$b);
                     }
+                    flock($out, LOCK_UN);
                 }
+                @fclose($out);
+
                 $new_file = uniqid().'.'.$ext;
                 $new_src = $path.DIRECTORY_SEPARATOR;
                 $dir = date('Ymd').DIRECTORY_SEPARATOR;
                 if( !is_dir($new_src.$dir) ){
-                    mkdir($new_src);
+                    mkdir($new_src.$dir);
                 }
                 $res = rename($old_name, $new_src.$dir.$new_file);
                 if( $res ){
@@ -138,6 +150,7 @@ class Upload extends Controller{
                     }
                     return json(error('上传失败'));
                 }
+
             }else{
                 $_n = explode('.',$file->getInfo()['name']);
                 if( in_array( end($_n) ,['gif','jpg','png']) ){
@@ -171,9 +184,6 @@ class Upload extends Controller{
                 //去掉"“.”、“..”以及带“.xxx”后缀的文件
                 if ($file != "." && $file != ".."&&strpos($file,".")) {
                     $fileArray[$i]= $file;
-                    if($i==100){
-                        break;
-                    }
                     $i++;
                 }
             }
