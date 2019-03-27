@@ -10,10 +10,90 @@ Target Server Type    : MYSQL
 Target Server Version : 50557
 File Encoding         : 65001
 
-Date: 2019-02-26 14:54:10
+Date: 2019-03-27 11:30:31
 */
 
 SET FOREIGN_KEY_CHECKS=0;
+
+-- ----------------------------
+-- Table structure for client_adv
+-- ----------------------------
+DROP TABLE IF EXISTS `client_adv`;
+CREATE TABLE `client_adv` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `admin_id` int(11) NOT NULL,
+  `type` int(11) NOT NULL,
+  `title` varchar(20) NOT NULL,
+  `image` int(11) NOT NULL,
+  `link` varchar(255) NOT NULL,
+  `navigate` int(11) NOT NULL DEFAULT '0',
+  `sort` int(11) NOT NULL DEFAULT '0',
+  `create_time` int(11) NOT NULL,
+  `update_time` int(11) NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of client_adv
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for client_article
+-- ----------------------------
+DROP TABLE IF EXISTS `client_article`;
+CREATE TABLE `client_article` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `admin_id` int(11) NOT NULL,
+  `cover_id` int(11) NOT NULL,
+  `file_id` int(11) NOT NULL DEFAULT '0',
+  `title` varchar(255) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `content` longtext NOT NULL,
+  `create_time` int(11) NOT NULL,
+  `update_time` int(11) NOT NULL,
+  `sort` int(11) NOT NULL DEFAULT '0',
+  `status` tinyint(4) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of client_article
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for client_article_category
+-- ----------------------------
+DROP TABLE IF EXISTS `client_article_category`;
+CREATE TABLE `client_article_category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `pid` int(11) NOT NULL DEFAULT '0',
+  `admin_id` int(11) NOT NULL,
+  `title` varchar(20) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `create_time` int(11) NOT NULL,
+  `update_time` int(11) NOT NULL,
+  `sort` int(11) NOT NULL DEFAULT '100',
+  `status` tinyint(4) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of client_article_category
+-- ----------------------------
+
+-- ----------------------------
+-- Table structure for client_article_category_relation
+-- ----------------------------
+DROP TABLE IF EXISTS `client_article_category_relation`;
+CREATE TABLE `client_article_category_relation` (
+  `article_id` int(11) NOT NULL,
+  `article_category_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- ----------------------------
+-- Records of client_article_category_relation
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for common_area
@@ -3318,10 +3398,10 @@ INSERT INTO `common_area` VALUES ('3358', '0', '钓鱼岛', '34', '1550469405', 
 INSERT INTO `common_area` VALUES ('3359', '0', '钓鱼岛', '0', '1550469405', '1550469405', '1');
 
 -- ----------------------------
--- Table structure for common_files
+-- Table structure for common_file
 -- ----------------------------
-DROP TABLE IF EXISTS `common_files`;
-CREATE TABLE `common_files` (
+DROP TABLE IF EXISTS `common_file`;
+CREATE TABLE `common_file` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) NOT NULL COMMENT '用户ID',
   `pid` int(11) NOT NULL COMMENT '文件夹ID',
@@ -3337,11 +3417,42 @@ CREATE TABLE `common_files` (
   `update_time` int(11) NOT NULL,
   `status` int(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of common_files
+-- Records of common_file
 -- ----------------------------
+INSERT INTO `common_file` VALUES ('1', '1', '0', 'qrcode_for_gh_551c49731e3c_258.jpg', '20190311/33a368e2b0d99d6f82fa96bbe90169a8.jpg', 'jpg', '', '', '', '0', '0', '1552289271', '0', '1');
+INSERT INTO `common_file` VALUES ('2', '1', '0', 'qrcode_for_gh_551c49731e3c_258.jpg', '20190311/5f2318b41e4190c05bc693cf10e8bfe5.jpg', 'jpg', '', '', '', '0', '0', '1552289345', '0', '1');
+
+-- ----------------------------
+-- Table structure for common_mpr_user
+-- ----------------------------
+DROP TABLE IF EXISTS `common_mpr_user`;
+CREATE TABLE `common_mpr_user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL DEFAULT '0',
+  `openid` varchar(255) NOT NULL,
+  `nickname` varchar(255) NOT NULL,
+  `gender` tinyint(4) NOT NULL,
+  `language` varchar(20) NOT NULL,
+  `country` varchar(255) NOT NULL,
+  `province` varchar(255) NOT NULL,
+  `city` varchar(255) NOT NULL,
+  `avatarurl` varchar(255) NOT NULL,
+  `remark` varchar(255) NOT NULL DEFAULT '',
+  `sort` int(11) NOT NULL DEFAULT '0',
+  `create_time` int(11) NOT NULL,
+  `update_time` int(11) NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1645 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of common_mpr_user
+-- ----------------------------
+INSERT INTO `common_mpr_user` VALUES ('1643', '0', 'oDcu45XUtnkqh-tS28NANKgMj5V8', '\"Sky\\ue331\"', '1', 'zh_CN', 'China', 'Guangdong', 'Guangzhou', 'https://wx.qlogo.cn/mmopen/vi_32/aTMfZrONf9ZLShMcJiaN9OVfyAuGCQibptyrlXnIQKXb1lHJyPoQBuxp8lPy0p3ZceC9CttrdUALaTRSY7FY9bIA/132', '', '0', '1551713684', '1551772052', '1');
+INSERT INTO `common_mpr_user` VALUES ('1644', '0', 'oxfaA4ipCvB6S9Yxq2qnMYF0lkFA', '', '0', '', '', '', '', '', '', '0', '1551777468', '1551777468', '1');
 
 -- ----------------------------
 -- Table structure for common_sms
@@ -3371,7 +3482,7 @@ DROP TABLE IF EXISTS `common_user`;
 CREATE TABLE `common_user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `type` int(1) NOT NULL COMMENT '用户类型',
-  `minip_user_id` int(11) NOT NULL COMMENT '小程序用户id',
+  `mpr_user_id` int(11) NOT NULL COMMENT '小程序用户id',
   `wechat_user_id` int(11) NOT NULL COMMENT '微信用户id',
   `nickname` varchar(50) NOT NULL COMMENT '昵称',
   `realname` varchar(20) NOT NULL COMMENT '姓名',
@@ -3392,7 +3503,7 @@ CREATE TABLE `common_user` (
 -- ----------------------------
 -- Records of common_user
 -- ----------------------------
-INSERT INTO `common_user` VALUES ('1', '0', '0', '0', '', '', '', '', 'admin', 'e10adc3949ba59abbe56e057f20f883e', '0', '', 'usjhpd8f95jk8spt1mc06v7eeo', '1551159936', '0', '1551159936', '1');
+INSERT INTO `common_user` VALUES ('1', '0', '0', '0', '', '', '', '', 'admin', 'e10adc3949ba59abbe56e057f20f883e', '0', '', 'ja56p0968v5fjpl5o0slnmh014', '1553565154', '0', '1553565154', '1');
 
 -- ----------------------------
 -- Table structure for common_wechat_user
@@ -3440,8 +3551,7 @@ CREATE TABLE `migrations` (
 -- ----------------------------
 -- Records of migrations
 -- ----------------------------
-INSERT INTO `migrations` VALUES ('20190216065508', 'Init', '2019-02-18 13:56:45', '2019-02-18 13:56:45', '0');
-INSERT INTO `migrations` VALUES ('20190218051356', 'InitData', '2019-02-18 13:56:45', '2019-02-18 13:56:46', '0');
+INSERT INTO `migrations` VALUES ('20190311070125', 'Fix', '2019-03-11 15:22:56', '2019-03-11 15:22:56', '0');
 
 -- ----------------------------
 -- Table structure for sys_action
@@ -3504,7 +3614,7 @@ CREATE TABLE `sys_logs` (
   `update_time` int(11) NOT NULL,
   `status` int(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sys_logs
@@ -3514,6 +3624,13 @@ INSERT INTO `sys_logs` VALUES ('2', '1', '0', '0', '0', '192.168.0.166', 'login'
 INSERT INTO `sys_logs` VALUES ('3', '0', '0', '0', '', '192.168.0.166', 'set_config', '日志记录失败', '1550820729', '1550820729', '1');
 INSERT INTO `sys_logs` VALUES ('4', '2', '0', '0', '0', '192.168.0.166', 'login_fail', '用户尝试使用账号：，密码： 登陆失败', '1551159930', '1551159930', '1');
 INSERT INTO `sys_logs` VALUES ('5', '1', '0', '0', '0', '192.168.0.166', 'login', 'admin 登陆成功', '1551159936', '1551159936', '1');
+INSERT INTO `sys_logs` VALUES ('6', '2', '0', '0', '0', '192.168.0.166', 'login_fail', '用户尝试使用账号：，密码： 登陆失败', '1551777066', '1551777066', '1');
+INSERT INTO `sys_logs` VALUES ('7', '1', '0', '0', '0', '192.168.0.166', 'login', 'admin 登陆成功', '1551777072', '1551777072', '1');
+INSERT INTO `sys_logs` VALUES ('8', '1', '0', '0', '0', '192.168.0.166', 'login', 'admin 登陆成功', '1552287137', '1552287137', '1');
+INSERT INTO `sys_logs` VALUES ('9', '3', '0', '0', '1', '192.168.0.166', 'image_upload', 'admin 上传了图片 ', '1552289271', '1552289271', '1');
+INSERT INTO `sys_logs` VALUES ('10', '3', '0', '0', '2', '192.168.0.166', 'image_upload', 'admin 上传了图片 ', '1552289346', '1552289346', '1');
+INSERT INTO `sys_logs` VALUES ('11', '1', '0', '0', '0', '192.168.0.166', 'login', 'admin 登陆成功', '1552353750', '1552353750', '1');
+INSERT INTO `sys_logs` VALUES ('12', '1', '0', '0', '0', '192.168.0.110', 'login', 'admin 登陆成功', '1553565154', '1553565154', '1');
 
 -- ----------------------------
 -- Table structure for sys_module
@@ -3525,7 +3642,7 @@ CREATE TABLE `sys_module` (
   `module` varchar(20) NOT NULL COMMENT '所属模块',
   `type` tinyint(4) NOT NULL COMMENT '模块类型',
   `title` varchar(20) NOT NULL COMMENT '模块名称',
-  `name` varchar(20) NOT NULL COMMENT '路由标识',
+  `name` varchar(100) NOT NULL,
   `src` varchar(255) DEFAULT NULL COMMENT '真实路径',
   `param` text COMMENT '参数',
   `icon` varchar(20) DEFAULT NULL COMMENT '模块图标',
@@ -3543,7 +3660,7 @@ CREATE TABLE `sys_module` (
   `sort` int(11) NOT NULL DEFAULT '0',
   `status` int(4) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of sys_module
@@ -3555,16 +3672,17 @@ INSERT INTO `sys_module` VALUES ('21', '22', 'admin', '1', '角色权限', 'role
 INSERT INTO `sys_module` VALUES ('22', '0', 'admin', '0', '系统管理', 'configManager', null, null, 'fa fa-gears', null, null, null, null, null, null, null, '1', '1', '1494223305', '1547702868', '0', '1');
 INSERT INTO `sys_module` VALUES ('23', '22', 'admin', '1', '行为规则', 'action', 'action/index', null, 'fa fa-filter', null, null, null, 'action', null, 'save:{:get_admin_info(\'username\')}新增了(id:{$id})\"{$title}\"\r\nupdate:{:get_admin_info(\'username\')}更新了(id:{$id})\"{$title}\"\r\ndelete:{:get_admin_info(\'username\')}删除了{[(id:{$id})\"{$title}\"]}\r\nstatus:{:get_admin_info(\'username\')}{:get_config($status,\'static.status_name\')}了{[(id:{$id})\"{$title}\"]}', null, '1', '1', '1494223394', '1495177356', '100', '1');
 INSERT INTO `sys_module` VALUES ('27', '0', 'admin', '0', '扩展杂项', 'other', null, null, null, null, null, null, null, null, null, null, '0', '1', '1494393258', '1494393297', '100', '1');
-INSERT INTO `sys_module` VALUES ('28', '27', 'admin', '0', '动态数据', 'linkage/:table/[:id]', 'extra/linkage', null, null, null, null, null, null, null, null, '获取联动查询数据来源的入口', '0', '1', '1494393390', '1495164120', '100', '1');
-INSERT INTO `sys_module` VALUES ('29', '22', 'admin', '1', '工作人员', 'admin', 'admin/index', null, 'fa fa-user', null, null, null, 'admin', '[ \'access|授权\'=>\'&/access/[:id]\']', 'save:{:get_admin_info(\'username\')}新增了(id:{$id})\"{$title}\"\r\nupdate:{:get_admin_info(\'username\')}更新了(id:{$id})\"{$title}\"\r\ndelete:{:get_admin_info(\'username\')}删除了{[(id:{$id})\"{$title}\"]}\r\nstatus:{:get_admin_info(\'username\')}{:get_config($status,\'static.status_name\')}了{[(id:{$id})\"{$title}\"]}\r\naccess:{:get_admin_info(\'username\')} 授权 {[(id:{$id})\"{$username}\"]}', null, '1', '1', '1494469776', '1505131874', '100', '1');
-INSERT INTO `sys_module` VALUES ('30', '27', 'admin', '0', '图片上传', 'upload/image/[:pid]/', 'upload/image', null, null, null, null, null, null, null, null, null, '0', '1', '1494660345', '1495606530', '100', '1');
-INSERT INTO `sys_module` VALUES ('31', '27', 'admin', '0', '文件上传', 'upload/file/[:pid]/[', 'upload/file', null, null, null, null, null, null, null, null, null, '0', '1', '1494660380', '1497059257', '100', '1');
-INSERT INTO `sys_module` VALUES ('32', '27', 'admin', '0', '文件管理器', 'manager/[:extension]', 'upload/manager', null, null, null, null, null, null, null, null, '对上传的文件进行管理以及选择使用的地方', '0', '1', '1494664584', '1496991096', '100', '1');
+INSERT INTO `sys_module` VALUES ('28', '27', 'admin', '0', '动态数据', 'linkage/:table/[:id]/[:pid]', 'extra/linkage', '', '', '', null, null, '', null, null, '获取联动查询数据来源的入口', '0', '1', '1494393390', '1552353917', '100', '1');
+INSERT INTO `sys_module` VALUES ('29', '22', 'admin', '1', '工作人员', 'user', 'user/index', '', 'fa fa-user', '', null, null, 'admin', '[ \'access|授权\'=>\'&/access/[:id]\']', 'save:{:get_admin_info(\'username\')}新增了(id:{$id})\"{$title}\"\r\nupdate:{:get_admin_info(\'username\')}更新了(id:{$id})\"{$title}\"\r\ndelete:{:get_admin_info(\'username\')}删除了{[(id:{$id})\"{$title}\"]}\r\nstatus:{:get_admin_info(\'username\')}{:get_config($status,\'static.status_name\')}了{[(id:{$id})\"{$title}\"]}\r\naccess:{:get_admin_info(\'username\')} 授权 {[(id:{$id})\"{$username}\"]}', '', '1', '1', '1494469776', '1552287464', '100', '1');
+INSERT INTO `sys_module` VALUES ('30', '27', 'admin', '0', '图片上传', 'upload/image/[:pid]/[:wechat]', 'upload/image', '', '', '', null, null, '', null, null, '', '0', '1', '1494660345', '1552287894', '100', '1');
+INSERT INTO `sys_module` VALUES ('31', '27', 'admin', '0', '文件上传', 'upload/file/[:pid]/[:extension]/[:wechat]', 'upload/file', '', '', '', null, null, '', null, null, '', '0', '1', '1494660380', '1552287908', '100', '1');
+INSERT INTO `sys_module` VALUES ('32', '27', 'admin', '0', '文件管理器', 'manager/[:extension]/[:wechat]', 'upload/manager', '', 'fa fa-book', '', null, null, '', null, null, '对上传的文件进行管理以及选择使用的地方', '0', '1', '1494664584', '1552354420', '100', '1');
 INSERT INTO `sys_module` VALUES ('33', '27', 'admin', '0', '图标选择器', 'icon', 'extra/icon', null, null, null, null, null, null, null, null, null, '0', '1', '1495164088', '1495164097', '100', '1');
 INSERT INTO `sys_module` VALUES ('34', '22', 'admin', '0', '系统配置', 'config', 'index/config', null, 'fa fa-gear', null, null, null, null, null, null, null, '1', '1', '1495177134', '1547702497', '100', '1');
 INSERT INTO `sys_module` VALUES ('36', '27', 'admin', '0', '清除缓存', 'clear', 'index/clear', null, null, null, null, null, null, null, null, null, '0', '1', '1497255338', '1497255338', '100', '1');
 INSERT INTO `sys_module` VALUES ('35', '0', 'wechat', '0', '微信管理', 'wechat', 'wechat', '', 'fa fa-wechat', '', null, null, '', '', null, '', '1', '1', '1495182279', '1523503787', '100', '1');
 INSERT INTO `sys_module` VALUES ('39', '35', 'wechat', '0', '公众号配置', 'open/set', 'open/set', '', '', '', null, null, '', '', null, '', '1', '1', '1497340776', '1526608129', '100', '1');
+INSERT INTO `sys_module` VALUES ('40', '35', 'wechat', '0', '小程序设置', 'mpr_set', 'Mpr/set', '', '', '', null, null, '', null, null, '', '1', '1', '1551777157', '1551777157', '0', '1');
 
 -- ----------------------------
 -- Table structure for sys_role
