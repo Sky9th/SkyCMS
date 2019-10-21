@@ -1,20 +1,13 @@
 {extend name="admin@tpl:basic" /}
 {block name="content"}
-<div class="container-fluid sm-padding-10">
+<div class="main-container container-fh__content">
     <div class="row">
         <!-- /.col-lg-12 -->
         <div class="col-lg-12 bg-white">
             <!-- START PANEL -->
             <div class="card panel-transparent ">
+                <p class='title'>{$action_info.intro}</p>
                 <div class="card-body">
-                    <!--<h5>
-                        <em style="font-style:normal">添加</em>
-                        <span class="semi-bold">
-                        {$action_info.title}
-                    </span>
-                    </h5>-->
-
-                     <p class='heading'>{$action_info.intro}</p>
                     <form id="form-work-top" class="form-horizontal" role="form" autocomplete="off">
                         <input type="hidden" name="_method" value="POST" />
                         {$content|raw}

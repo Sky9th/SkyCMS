@@ -9,8 +9,8 @@ namespace app\common\model\common;
 
 use app\common\model\Common;
 
-class Files extends Common {
+class File extends Common {
 
-    protected $table = 'common_files';
+    protected $table = 'common_file';
 
 }

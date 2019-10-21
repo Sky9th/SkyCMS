@@ -7,7 +7,7 @@
 namespace app\admin\logic;
 
 use app\common\model\sys\Module as ModuleModel;
-use app\common\validate\Module as ModuleValidate;
+use app\common\validate\sys\Module as ModuleValidate;
 
 class Module extends Resource{
 
@@ -105,6 +105,11 @@ class Module extends Resource{
                 }
             }
             $list[$key]['param'] = $ext;
+            if($value['type'] == '0'){
+                $list[$key]['url'] = url(($value['module'] ? : 'admin') . '/' . $value['src'], $ext);
+            }else{
+                $list[$key]['url'] = ($value['module'] ? : 'admin') . '/' . $value['name'].'s';
+            }
         }
         $list = $list->toArray();
         $tree = list_to_tree($list);

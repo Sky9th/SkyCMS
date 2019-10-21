@@ -189,7 +189,7 @@ function get_image($id, $html = false, $first = false , $width = '', $height  = 
         }
         return get_images($ids);
     }else {
-        $model = new \app\common\model\common\Files();
+        $model = new \app\common\model\common\File();
         $file = $model->find($id);
         $src = str_replace('\\','/', $file['src']);
         if ($file) {
@@ -220,7 +220,7 @@ function get_image($id, $html = false, $first = false , $width = '', $height  = 
  */
 function get_images($ids){
     $imgs = [];
-    $model = new \app\common\model\common\Files();
+    $model = new \app\common\model\common\File();
     $file = $model->where('id','in', $ids)->select();
     foreach ( $file as $key=>$value){
         if (is_file("./uploads/images/" . $value['src'])) {
@@ -238,7 +238,7 @@ function get_images($ids){
  * @return string
  */
 function get_file($id, $html = false, $prefix = true){
-    $model = new \app\common\model\common\Files();
+    $model = new \app\common\model\common\File();
     $file = $model->find($id);
     if( !$file ){
         if( $html ){
@@ -306,7 +306,7 @@ function get_file($id, $html = false, $prefix = true){
  * @return string
  */
 function get_files($id, $html = false, $prefix = true){
-    $model = new \app\common\model\common\Files();
+    $model = new \app\common\model\common\File();
     $file = $model->find($id);
     if( !$file ){
         if( $html ){
@@ -560,4 +560,65 @@ function get_config_val($val, $name){
         }
     }
     return false;
+}
+
+/**
+ * 配置字符串生成
+ * @param $var
+ * @param int $level
+ * @return string
+ */
+function my_var_export($var, $level = 1){
+    $str = '['.PHP_EOL;
+    $indent = '';
+    $space = '  ';
+    for($i = 0 ; $i < $level ; $i++){
+        $indent .= $space;
+    }
+    foreach ($var as $key => $value) {
+        if(is_array($value)){
+            $level++;
+            $_s = my_var_export($value, $level);
+            $str .= "$indent\"$key\"" . '=>' . $_s .','. PHP_EOL;
+        }else {
+            $str .= "$indent\"$key\"" . '=>"' . $value . '",' . PHP_EOL;
+        }
+        $level = 1 ;
+    }
+    return $str.$indent.']' ;
+}
+
+
+/**
+ * 根据最底层id复原各级联动数组
+ * @param string $table 数据来源表
+ * @param int $value 底层id
+ * @param string $pid 父键
+ * @param array $result 数据集
+ * @param bool $first 是否首次调用递归
+ * @return array
+ */
+function rollback_linkage($table, $value, $pid = 'pid', $result = [], $first = true){
+    $cur = \think\Db::table($table)->find($value);
+    $data = \think\Db::table($table)->where(['pid' => $cur[$pid]])->select();
+    array_unshift($data,['id'=>'','title'=>'无']);
+    if( $data && $cur ){
+        $last = \think\Db::table($table)->where(['id' => $cur[$pid]])->find();
+        foreach ($data as $key => $v) {
+            if( $v['id'] == $cur['id'] ){
+                $data[$key]['selected'] = true;
+            }
+        }
+        if( $last ) {
+            $result = array_merge($result,rollback_linkage($table, $last['id'], $pid, $result, false));
+        }
+    }
+    $result[$value] = $data;
+    if( $first ){
+        $data = \think\Db::table($table)->where(['pid' => $cur['id']])->select();
+        array_unshift($data,['id'=>'','title'=>'无']);
+        $result[$cur['pid']] = $data;
+    }
+    return $result;
+
 }

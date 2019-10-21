@@ -21,8 +21,4 @@ class WechatUser extends Model{
         return json_encode($value);
     }
 
-    public function getStatusAttr($value){
-        return get_config($value, 'static.status');
-    }
-
 }

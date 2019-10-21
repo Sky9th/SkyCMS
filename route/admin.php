@@ -19,17 +19,10 @@ try{
         $module = $value['module'] ? $value['module'].'/':'admin/';
         $rest = $module.$value['name'].'s';
         $control = $module.$value['name'];
-        //\think\facade\Route::resource( $rest , $control );
-        \think\facade\Route::get($rest, $control.'/index');
-        \think\facade\Route::get($rest.'/create', $control.'/create');
-        \think\facade\Route::post($rest, $control.'/save');
-        \think\facade\Route::get($rest.'/:id', $control.'/read');
-        \think\facade\Route::get($rest.'/:id/edit', $control.'/edit');
-        \think\facade\Route::put($rest.'/:id', $control.'/update');
-        \think\facade\Route::delete($rest.'/:id', $control.'/delete');
-        \think\facade\Route::put($rest.'/status/:status/[:id]', $control.'/status');
-        \think\facade\Route::get($rest.'/detail/:id', $control.'/detail');
-        /*if( $value['resource'] ) {
+        \think\facade\Route::resource( $rest , $control );
+        \think\facade\Route::rule($rest.'/status/:status/:id', $control.'/status' ,'PUT');
+        \think\facade\Route::rule($rest.'/detail/:id', $control.'/detail' );
+        if( $value['resource'] ) {
             @eval('$_act=' . $value['resource'] . ';');
             if (!empty($_act)) {
                 $param = [];
@@ -45,12 +38,10 @@ try{
                     if( $type[0] == '' ){
                         $type[0] = 'any';
                     }
-                    call_user_func(array('\think\facade\Route', $type[0]), $rest . $type[1], $control . '/' . $k);
-                    //$only['only'][] = $k;
+                    call_user_func(array('\think\Facade\Route', $type[0]), $rest . $type[1], $control . '/' . $k);
                 }
-                //\think\Route::resource($rest, $control, $only);
             }
-        }*/
+        }
     }
 }catch (Exception $e){
 }

@@ -5,11 +5,11 @@
  * Date: 2017/4/19
  * Time: 13:47
  */
-namespace app\common\validate;
-use think\Db;
+namespace app\common\validate\common;
+
 use think\Validate;
 
-class Admin extends Validate{
+class User extends Validate{
 
     protected $rule = [
         'username|用户名' => 'require',
@@ -33,7 +33,8 @@ class Admin extends Validate{
     ];
 
     public function passwordRight($value){
-        $password = Db::table('admin')->where('id',is_admin())->value('password');
+
+        $password = \app\common\model\common\User::where('id',is_login())->value('password');
         if( md5($value) == $password ){
             return true;
         }

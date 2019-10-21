@@ -1,7 +1,7 @@
 <div class="image-upload" id="{$config.prefix}{$name}">
     <div class="image-item">
         <div class="file-preview">
-            {$config.value|get_file=true|default="<i class='fa fa-file'></i><p>暂无文件</p>"}
+            {$config.value|get_file=true|default="<i class='fa fa-file'></i><p>暂无文件</p>"|raw}
         </div>
         <div class="image-item-edit">
             <div class="btn-group">

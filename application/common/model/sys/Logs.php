@@ -7,6 +7,7 @@
 namespace app\common\model\sys;
 
 use app\common\model\Sys;
+use think\Db;
 
 class Logs extends Sys {
 
@@ -49,9 +50,9 @@ class Logs extends Sys {
                 if (is_array($model)) {
                     $this->log_data = $model;
                 } else if (is_string($model)) {
-                    $this->log_data = Db::table($model)->where(['id' => ['in', $id]])->select();
+                    $this->log_data = Db::table($model)->where('id','in', $id)->select();
                 } else if( is_object($model) ){
-                    $this->log_data = $model->where(['id' => ['in', $id]])->select();
+                    $this->log_data = $model->where('id' ,'in', $id)->select();
                 }
                 $remark = $this->parseLog($this->log);
             } else {
@@ -103,7 +104,7 @@ class Logs extends Sys {
             $id = implode(',', $id);
         }
         $this->log = $format[$method];
-        $this->log_data = db($table)->where( ['id' => ['in', $id ]] )->select();
+        $this->log_data = db($table)->where('id','in', $id)->select();
         $this->action = $action;
         $remark = $this->parseLog($this->log);
         $this->data([

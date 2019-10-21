@@ -1,0 +1,43 @@
+<div class="modal-header clearfix text-left">
+    <h5>管理员 <span class="semi-bold">授权</span></h5>
+    <p class="p-b-10">管理员可以属于多个角色组，其权限是将会各个角色组相互交叉、组合、汇总</p>
+</div>
+<form role="form" id="access" action="{:url('admin/user/access', $param )}" method="post">
+<div class="modal-body">
+    <div id="check-tree-box" >
+        <div id="check-tree"></div>
+    </div>
+    <input type="hidden" name="access_ids" value="" >
+    <input type="hidden" name="access_id" value="" >
+</div>
+<div class="modal-footer">
+    <button type="submit" class="btn btn-primary btn-block" onclick="ajax_post('access');return false;">确定</button>
+</div>
+</form>
+<script>
+    $(function(){
+        $("#check-tree").dynatree({
+            checkbox: true,
+            // Override class name for checkbox icon:
+            selectMode: 2,
+            children: {$data|raw},
+            // The following options are only required, if we have more than one tree on one page:
+            cookieId: "dynatree-Cb2",
+            idPrefix: "dynatree-Cb2-",
+            onSelect: function(select, node) {
+                var selNodes = node.tree.getSelectedNodes();
+                // convert to title/key array
+                var selKeys = $.map(selNodes, function(node) {
+                    return node.data.key ;
+                });
+                $("input[name=access_ids]").val(selKeys.join(','));
+                var ids = ''
+                $.each($('input[name="ids[]"]:checked'),function(){
+                    ids += ids ? ','+$(this).val() : $(this).val();
+                })
+                $("input[name=access_id]").val( ids );
+            },
+        });
+    })
+
+</script>

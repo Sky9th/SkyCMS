@@ -8,6 +8,7 @@
 
 namespace app\admin\controller;
 
+use app\common\model\common\File;
 use think\Controller;
 use think\Db;
 
@@ -20,32 +21,31 @@ class Upload extends Controller{
      * @throws \think\exception\PDOException
      */
     public function Manager(){
+        $file = new File();
         if(request()->isPost()){
+            $map = [];
+            $condition[] = ['title','like','%'.input('keyword').'%'];
             if( input('post.extension') ){
-                $map['ext'] = ['in' , config('static.extension')[input('post.extension')].',folder'];
+                $map['ext'] = explode(',',config('static.extension')[input('post.extension')].',folder');
             }else{
                 if( input('post.type') == '0' ){
-                    $map['ext'] = ['in' , config('static.extension')['image'].',folder'];
+                    $map['ext'] = explode(',',config('static.extension')['image'].',folder');
                 }else{
-                    $map['ext'] = ['in' , config('static.extension')['file'].',folder'];
+                    $map['ext'] = explode(',',config('static.extension')['file'].',folder');
                 }
             }
             if( input('post.wechat') ){
-                $map['media_id'] = [ 'neq', '' ];
+                $condition[] = ['media_id', 'neq', ''];
             }
-            $map['user_id'] = is_admin();
+            $map['user_id'] = is_login();
             $map['pid'] = input('pid' , 0);
-            $map['title'] = ['like','%'.input('keyword').'%'];
             $map['status'] = 1;
-            if( input('wechat') ){
-                $map['media_id'] = ['neq',''];
-            }
-            $list = db('files')->where($map)->order('folder desc,create_time desc')->paginate(16, true, [ 'path'=>'' ]);
+            $list = $file->where($map)->where($condition)->order('folder desc,create_time desc')->paginate(16, true, [ 'path'=>'' ]);
             return ['info'=>$list,'page'=>$list->render()];
         }
         if(request()->isPut()){
             $data = [
-                'user_id' => is_admin(),
+                'user_id' => is_login(),
                 'pid' => input('pid',0),
                 'title' => input('folder'),
                 'src' => '',
@@ -57,7 +57,7 @@ class Upload extends Controller{
             if( !$data['title'] ){
                 return error('请填写名称');
             }
-            $res = db('files')->insert($data);
+            $res = $file->insert($data);
             if( $res ){
                 app_log(1, 0, 'image_folder_create' , $data);
                 return success(lang('success'));
@@ -68,12 +68,12 @@ class Upload extends Controller{
         if(request()->isDelete()){
             $delete = input('delete.');
             $ids = $delete['ids'];
-            $children = db('files')->where(['pid' => ['in',$ids]])->count();
+            $children = $file->where(['pid' => $ids])->count();
             if( $children > 0 ){
                 return error('子文件夹存在内容，无法删除');
             }else{
-                $app_log = app_log(1,  $ids, 'file_manager_delete', 'files', '', true);
-                $res = db('files')->where(['id' => ['in',$ids]])->delete();
+                $app_log = app_log(1,  $ids, 'file_manager_delete', 'common_file', '', true);
+                $res = $file->where(['id' => $ids])->delete();
                 if( $res ){
                     $app_log->save();
                     return success(lang('success'));
@@ -95,7 +95,7 @@ class Upload extends Controller{
             $wechat = input('wechat');
             $file = request()->file('file');
             config('app_trace', false);
-            $tmp = RUNTIME_PATH . 'file' . DS;
+            $tmp = env('RUNTIME_PATH') . 'file' . DIRECTORY_SEPARATOR;
             if( input('chunks') ) {
                 $chunk = input('chunk');
                 $name = input('name');
@@ -103,31 +103,43 @@ class Upload extends Controller{
                 // 移动到框架应用根目录/public/uploads/ 目录下
                 $info = $file->move($tmp.$dir, $name.'.'.$chunk, true);
                 if ($info) {
-                    return json(success('上传成功'));
+                    return json(success('上传成功', $info));
                 } else {
                     return json(error($file->getError()));
                 }
             }else if( input('combine') ){
-                $path = ROOT_PATH . 'public' . DS . 'uploads' . DS . 'files';
+
+                $path = env('ROOT_PATH') . 'public' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'files';
                 $dir = str_replace('-', '0', input('hash'));
+                $old_name = $tmp.$dir.DIRECTORY_SEPARATOR.input('name');
                 $chunks = $this->getFile($tmp.$dir);
-                $old_name = $tmp.$dir.DS.input('name');
                 $explode = explode('.',input('name'));
                 $ext = end($explode);
-                foreach ($chunks as $key => $value) {
-                    $size = file_put_contents($old_name, file_get_contents($tmp.$dir.DS.$value), FILE_APPEND);
-                    if( !$size ){
-                        if( is_file($old_name) ){
-                            unlink($old_name);
+
+                if (!file_exists($old_name)) fopen($old_name, "w");
+                $out = @fopen($old_name, "wb");
+                if (flock($out, LOCK_EX)) {
+                    foreach ($chunks as $b) {
+                        // 读取文件
+                        if (!$in = @fopen($tmp.$dir.DIRECTORY_SEPARATOR.$b, "rb")) {
+                            break;
                         }
-                        return json(error('文件合并失败'));
+                        // 写入文件
+                        while ($buff = fread($in, 52428800)) {
+                            fwrite($out, $buff);
+                        }
+                        @fclose($in);
+                        @unlink($tmp.$dir.DIRECTORY_SEPARATOR.$b);
                     }
+                    flock($out, LOCK_UN);
                 }
+                @fclose($out);
+
                 $new_file = uniqid().'.'.$ext;
-                $new_src = $path.DS;
-                $dir = date('Ymd').DS;
+                $new_src = $path.DIRECTORY_SEPARATOR;
+                $dir = date('Ymd').DIRECTORY_SEPARATOR;
                 if( !is_dir($new_src.$dir) ){
-                    mkdir($new_src);
+                    mkdir($new_src.$dir);
                 }
                 $res = rename($old_name, $new_src.$dir.$new_file);
                 if( $res ){
@@ -138,12 +150,13 @@ class Upload extends Controller{
                     }
                     return json(error('上传失败'));
                 }
+
             }else{
                 $_n = explode('.',$file->getInfo()['name']);
                 if( in_array( end($_n) ,['gif','jpg','png']) ){
-                    $path = ROOT_PATH . 'public' . DS . 'uploads' . DS . 'images';
+                    $path = env('ROOT_PATH') . 'public' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'images';
                 }else{
-                    $path = ROOT_PATH . 'public' . DS . 'uploads' . DS . 'files';
+                    $path = env('ROOT_PATH') . 'public' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'files';
                 }
                 $info = $file->move($path);
                 if($info) {
@@ -171,9 +184,6 @@ class Upload extends Controller{
                 //去掉"“.”、“..”以及带“.xxx”后缀的文件
                 if ($file != "." && $file != ".."&&strpos($file,".")) {
                     $fileArray[$i]= $file;
-                    if($i==100){
-                        break;
-                    }
                     $i++;
                 }
             }
@@ -188,7 +198,7 @@ class Upload extends Controller{
      * @return \think\response\Json|\think\response\View
      */
     public function image(){
-        $path = env('ROOT_PATH') . 'public' . env('DS') . 'uploads' . env('DS') . 'images';
+        $path = env('ROOT_PATH') . 'public' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR . 'images';
         if(request()->isPost()){
             $pid = input('pid');
             $wechat = input('wechat');
@@ -218,8 +228,9 @@ class Upload extends Controller{
             'ext' => $ext,
             'create_time' => time(),
         ];
-        $res = db('files')->insert($data);
-        $last_id = db('files')->getLastInsID();
+        $file = new File();
+        $res = $file->insert($data);
+        $last_id = $file->getLastInsID();
         if( $res ){
             app_log(1, $last_id, 'image_upload' , $data);
             if( $wechat == '1' && class_exists('app\wechat\controller\Manager') ) {

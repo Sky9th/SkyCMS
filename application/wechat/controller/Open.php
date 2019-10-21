@@ -10,18 +10,11 @@ namespace app\wechat\controller;
 
 use app\admin\controller\Common;
 use app\admin\widget\Form;
-use app\admin\widget\Tool;
 use app\wechat\logic\Error;
 use EasyWeChat\Factory;
 use EasyWeChat\Kernel\Exceptions\HttpException;
 
 class Open extends Common{
-
-    public function index(){
-        $tool = new Tool();
-        $this->assign('breadcrumb', $tool->breadcrumb());
-        return view();
-    }
 
     public function set(){
         if(request()->isPost()){

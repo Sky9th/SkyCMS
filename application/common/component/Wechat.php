@@ -22,11 +22,15 @@ class Wechat {
 
     public function __construct(){
         config('app_trace', false);
-        $this->app = Factory::officialAccount(config('wechat'));
+        $this->app = Factory::officialAccount(config('wechat.'));
     }
 
     /**
      * 微信服务器的交互处理
+     * @throws \EasyWeChat\Kernel\Exceptions\BadRequestException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidConfigException
+     * @throws \ReflectionException
      */
     public function server(){
         $app = $this->app;
@@ -88,6 +92,7 @@ class Wechat {
      * @param $param
      * @param $tmp
      * @return array|\EasyWeChat\Kernel\Support\Collection|object|\Psr\Http\Message\ResponseInterface|string
+     * @throws \EasyWeChat\Kernel\Exceptions\InvalidArgumentException
      */
     public function template($openid, $url, $param, $tmp){
         if( !is_array($param) ){

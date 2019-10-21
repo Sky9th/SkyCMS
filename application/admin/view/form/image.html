@@ -1,7 +1,7 @@
 <div class="image-upload" id="{$config.prefix}{$name}">
     <div class="image-item">
         <div class="file-preview">
-            {$config.value|get_image=true,false,false,$config.width,$config.height|default="<i class='fa fa-plus text-success'></i>"}
+            {$config.value|get_image=true,false,false,$config.width,$config.height|default="<i class='fa fa-plus text-success'></i>"|raw}
         </div>
         <div class="image-item-edit">
             <div class="btn-group">
