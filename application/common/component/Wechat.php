@@ -18,7 +18,7 @@ use think\facade\Log;
 
 class Wechat {
 
-    protected $app ;
+    public $app ;
 
     public function __construct(){
         config('app_trace', false);

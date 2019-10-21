@@ -13,5 +13,6 @@
 return [
     'sms' => \app\common\component\Sms::class,
     'excel' => \app\common\component\Excel::class,
-    'wechat' => \app\common\component\Wechat::class
+    'wechat' => \app\common\component\Wechat::class,
+    'mpr' => \app\common\component\Mpr::class
 ];
